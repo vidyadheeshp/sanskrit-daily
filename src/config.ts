@@ -22,5 +22,8 @@ export const STORAGE_KEY = "sanskrit-daily:v1";
 
 export const SITE_NAME = "Sanskrit Daily";
 
+/** Public repository (used for the "report a mistake" link). */
+export const REPO_URL = "https://github.com/vidyadheeshp/sanskrit-daily";
+
 /** Max number of spaced-review items offered in one sitting. */
 export const MAX_REVIEW_PER_SESSION = 3;

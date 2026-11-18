@@ -45,7 +45,8 @@ are not in the published code.
 
 ## Daily routine — automatic
 
-Nothing to do. `.github/workflows/deploy.yml` runs at 00:20 UTC every day, rebuilds, and deploys.
+Nothing to do. `.github/workflows/deploy.yml` runs at **12:00 AM IST (18:30 UTC)** every day, rebuilds, and deploys. (GitHub schedules are in UTC; IST is UTC+5:30.)
+It can start a few minutes late — harmless, because tomorrow's lesson is already in the site and the app unlocks it at each learner's own midnight.
 It also runs on every push to `main`, and has a **Run workflow** button (Actions tab → *Deploy to
 GitHub Pages* → *Run workflow*).
 

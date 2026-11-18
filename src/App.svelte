@@ -11,11 +11,13 @@
   import Review from "./routes/Review.svelte";
   import Settings from "./routes/Settings.svelte";
   import About from "./routes/About.svelte";
+  import Why from "./routes/Why.svelte";
 
   const links = [
     { href: "#/", name: "today", label: "Today" },
     { href: "#/archive", name: "archive", label: "Archive" },
     { href: "#/notes", name: "notes", label: "My notes" },
+    { href: "#/why", name: "why", label: "Why" },
     { href: "#/settings", name: "settings", label: "Settings" },
     { href: "#/about", name: "about", label: "About" },
   ];
@@ -60,6 +62,8 @@
       <Notes />
     {:else if route.name === "review"}
       <Review />
+    {:else if route.name === "why"}
+      <Why />
     {:else if route.name === "settings"}
       <Settings />
     {:else}

@@ -3,6 +3,7 @@
 </script>
 
 <h1>About</h1>
+<p><a href="#/why">Why does Sanskrit Daily exist? →</a></p>
 
 <div class="card stack">
   <h2>What this is</h2>

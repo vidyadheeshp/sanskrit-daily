@@ -321,6 +321,32 @@ describe("date gating", () => {
   });
 });
 
+describe("Why page", () => {
+  it("explains the initiative, links to lesson 1 and to the issue tracker, and is in the navigation", async () => {
+    const app = mountApp();
+    await goto("#/why");
+    expect(q("h1")?.textContent).toContain("Why Sanskrit Daily?");
+    expect(page()).toContain("A slow, steady way to learn");
+    expect(page()).toContain("not yet been reviewed by a Sanskrit scholar");
+
+    const nav = document.querySelector('nav a[href="#/why"]');
+    expect(nav?.getAttribute("aria-current")).toBe("page");
+
+    expect(document.querySelector('a[href="#/day/1"]')).not.toBeNull();
+    const issues = document.querySelector<HTMLAnchorElement>('a[href$="/issues"]');
+    expect(issues?.href).toMatch(/^https:\/\/github\.com\/.+\/issues$/);
+    expect(issues?.rel).toContain("noopener"); // external link must not get access to this window
+    unmount(app);
+  });
+
+  it("is reachable from the About page", async () => {
+    const app = mountApp();
+    await goto("#/about");
+    expect(document.querySelector('main a[href="#/why"]')).not.toBeNull();
+    unmount(app);
+  });
+});
+
 describe("visit counter setting", () => {
   it("says so when this copy of the site has no counter", async () => {
     const app = mountApp();

@@ -16,7 +16,7 @@ Pages is free for public repositories.
 | Trigger | Why |
 |---|---|
 | push to `main` | publish changes |
-| **daily at 00:20 UTC** (`schedule`) | publish the next day's lesson without anyone lifting a finger |
+| **daily at 12:00 AM IST** = 18:30 UTC (`schedule`) | publish the next day's lesson without anyone lifting a finger |
 | **Run workflow** button (`workflow_dispatch`) | emergencies |
 
 Steps: `npm ci` → `npm test` → `npm run check` → `npm run build` (which also writes the per-lesson share pages) → deploy.
