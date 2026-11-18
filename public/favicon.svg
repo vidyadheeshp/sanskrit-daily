@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Pratyaham: a staircase of three steps with a lamp flame above the top step">
-  <title>Pratyaham — a lamp lit one step at a time</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Dine Dine: a staircase of three steps with a lamp flame above the top step">
+  <title>Dine Dine — a lamp lit one step at a time</title>
   <rect width="256" height="256" rx="56" fill="#8a3b12"/>
   <!-- one connected staircase: a small step at a time -->
   <path d="M44 208 V182 H96 V152 H156 V124 H212 V208 Z" fill="#fbf6ec" stroke="#fbf6ec" stroke-width="12" stroke-linejoin="round"/>

@@ -7,7 +7,7 @@
   A slow, steady way to learn <span class="dev" lang="sa">संस्कृतम्</span> — one small lesson at a time.
 </p>
 <div class="callout" role="note" style="margin-bottom: 1rem">
-  <strong><span class="dev" lang="sa">{SITE_NAME_DEV}</span> ({SITE_NAME.toLowerCase()})</strong> means “every day”.
+  <strong><span class="dev" lang="sa">{SITE_NAME_DEV}</span> ({SITE_NAME.toLowerCase()})</strong> means “day by day”.
   <span class="dev" lang="sa">{SITE_TAGLINE}</span> — {SITE_TAGLINE_EN}. {SITE_NAME} is the name; “{SITE_SUBTITLE}” says what it is.
 </div>
 

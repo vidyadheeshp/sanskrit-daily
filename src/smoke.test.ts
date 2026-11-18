@@ -366,8 +366,8 @@ describe("brand", () => {
     const app = mountApp();
     await goto("#/");
     const brand = document.querySelector(".brand")!;
-    expect(brand.querySelector(".brand-name")?.textContent).toBe("प्रत्यहम्");
-    expect(brand.querySelector(".brand-sub")?.textContent).toContain("Pratyaham · Sanskrit Daily");
+    expect(brand.querySelector(".brand-name")?.textContent).toBe("दिने दिने");
+    expect(brand.querySelector(".brand-sub")?.textContent).toContain("Dine Dine · Sanskrit Daily");
     expect(brand.getAttribute("aria-label")).toContain("Sanskrit Daily");
     const logo = brand.querySelector("svg.logo");
     expect(logo).not.toBeNull();
@@ -381,9 +381,9 @@ describe("Why page", () => {
   it("explains the initiative, links to lesson 1 and to the issue tracker, and is in the navigation", async () => {
     const app = mountApp();
     await goto("#/why");
-    expect(q("h1")?.textContent).toContain("Why Pratyaham?");
-    expect(page()).toContain("प्रत्यहम्");
-    expect(page()).toContain("means “every day”");
+    expect(q("h1")?.textContent).toContain("Why Dine Dine?");
+    expect(page()).toContain("दिने दिने");
+    expect(page()).toContain("means “day by day”");
     expect(page()).toContain("A slow, steady way to learn");
     expect(page()).toContain("not yet been reviewed by a Sanskrit scholar");
 

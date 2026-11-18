@@ -1,6 +1,6 @@
 # Name and logo — shortlist
 
-Status: **DECIDED — see [BRAND.md](BRAND.md).** Chosen: the name **Pratyaham (प्रत्यहम्)**, the staircase-and-lamp logo, tagline *प्रतिदिनं संस्कृतम्*. The rest of this page is the record of how it was chosen. The Sanskrit below was written by an AI
+Status: **DECIDED — see [BRAND.md](BRAND.md).** Chosen: first **Pratyaham (प्रत्यहम्)**, then — the same day — changed to **Dine Dine (दिने दिने, "day by day")**, with the staircase-and-lamp logo and the tagline *प्रतिदिनं संस्कृतम्*. The rest of this page is the record of how it was chosen. The Sanskrit below was written by an AI
 assistant and has **not been checked by a Sanskrit scholar** — verify before adopting (see docs/CONTENT-REVIEW.md).
 
 ## What the name should say

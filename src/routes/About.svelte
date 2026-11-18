@@ -3,7 +3,7 @@
 </script>
 
 <h1>About</h1>
-<p><a href="#/why">Why does Pratyaham exist? →</a></p>
+<p><a href="#/why">Why does Dine Dine exist? →</a></p>
 
 <div class="card stack">
   <h2>What this is</h2>

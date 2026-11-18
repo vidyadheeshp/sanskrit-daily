@@ -13,15 +13,15 @@ const codepoints = (s: string) => [...s].map((c) => c.codePointAt(0)!.toString(1
 
 describe("frozen identity", () => {
   it("has the chosen name, subtitle and tagline", () => {
-    expect(SITE_NAME).toBe("Pratyaham");
+    expect(SITE_NAME).toBe("Dine Dine");
     expect(SITE_SUBTITLE).toBe("Sanskrit Daily");
     expect(SITE_TAGLINE_EN).toBe("Sanskrit, every day");
   });
 
   it("spells the Devanagari name and tagline exactly (code point by code point)", () => {
-    // प्रत्यहम्  = pa + virama + ra + ta + virama + ya + ha + ma + virama
-    expect(codepoints(SITE_NAME_DEV)).toEqual(["92a", "94d", "930", "924", "94d", "92f", "939", "92e", "94d"]);
-    expect(SITE_NAME_DEV.normalize("NFC")).toBe("प्रत्यहम्");
+    // दिने दिने = da + i-sign + na + e-sign, space, da + i-sign + na + e-sign
+    expect(codepoints(SITE_NAME_DEV)).toEqual(["926", "93f", "928", "947", "20", "926", "93f", "928", "947"]);
+    expect(SITE_NAME_DEV.normalize("NFC")).toBe("दिने दिने");
     expect(SITE_TAGLINE.normalize("NFC")).toBe("प्रतिदिनं संस्कृतम्");
   });
 
@@ -33,7 +33,7 @@ describe("frozen identity", () => {
 });
 
 describe("frozen logo", () => {
-  const master = text("docs/brand/logo/pratyaham-logo.svg");
+  const master = text("docs/brand/logo/dine-dine-logo.svg");
 
   it("keeps the favicon byte-identical to the master logo", () => {
     expect(text("public/favicon.svg")).toBe(master);
@@ -75,12 +75,12 @@ describe("icon set and link-preview banner", () => {
     expect(srcs).toEqual(expect.arrayContaining(["favicon.svg", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]));
     for (const s of srcs) expect(existsSync(file(`public/${s}`)), s).toBe(true);
     expect(config).toContain('purpose: "maskable"');
-    expect(config).toContain('short_name: "Pratyaham"');
+    expect(config).toContain('short_name: "Dine Dine"');
   });
 
   it("is wired into the page head", () => {
     const html = text("index.html");
-    expect(html).toContain("<title>Pratyaham — Sanskrit Daily</title>");
+    expect(html).toContain("<title>Dine Dine — Sanskrit Daily</title>");
     expect(html).toContain('rel="apple-touch-icon"');
     expect(html).toContain("favicon.svg");
   });

@@ -22,10 +22,10 @@ export const STORAGE_KEY = "sanskrit-daily:v1";
 
 /**
  * BRAND — FROZEN (see docs/brand/BRAND.md). A test pins these exact values.
- * Name: Pratyaham (प्रत्यहम्, "every day"). Descriptive subtitle: Sanskrit Daily.
+ * Name: Dine Dine (दिने दिने, "day by day"). Descriptive subtitle: Sanskrit Daily.
  */
-export const SITE_NAME = "Pratyaham";
-export const SITE_NAME_DEV = "प्रत्यहम्";
+export const SITE_NAME = "Dine Dine";
+export const SITE_NAME_DEV = "दिने दिने";
 export const SITE_SUBTITLE = "Sanskrit Daily";
 export const SITE_TAGLINE = "प्रतिदिनं संस्कृतम्";
 export const SITE_TAGLINE_EN = "Sanskrit, every day";

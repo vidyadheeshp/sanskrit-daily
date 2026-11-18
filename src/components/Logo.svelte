@@ -1,6 +1,6 @@
 <script lang="ts">
   /**
-   * The Pratyaham logo mark. FROZEN: this must stay identical to docs/brand/logo/pratyaham-logo.svg
+   * The Dine Dine logo mark. FROZEN: this must stay identical to docs/brand/logo/dine-dine-logo.svg
    * (a test compares them). See docs/brand/BRAND.md before changing anything here.
    */
   let { size = 36 }: { size?: number } = $props();

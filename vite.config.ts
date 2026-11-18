@@ -50,8 +50,8 @@ export default defineConfig({
         navigateFallbackDenylist: [/\/d\/\d+\/?$/],
       },
       manifest: {
-        name: "Pratyaham — Sanskrit Daily",
-        short_name: "Pratyaham",
+        name: "Dine Dine — Sanskrit Daily",
+        short_name: "Dine Dine",
         description: "One small Sanskrit lesson every day. No login, no ads.",
         theme_color: "#8a3b12",
         background_color: "#fbf6ec",
