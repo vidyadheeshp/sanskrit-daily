@@ -1,0 +1,30 @@
+{
+  "name": "sanskrit-daily",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "A new small Sanskrit lesson every day. Frontend only, no login, no tracking.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsx scripts/build-share-pages.ts",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "dev:unlock": "vite --mode unlock",
+    "post": "tsx scripts/daily-post.ts"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/node": "^26.6.6",
+    "jsdom": "^31.0.1",
+    "svelte": "^5.57.3",
+    "svelte-check": "^4.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.0",
+    "vite": "^8.3.8",
+    "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.1.0",
+    "zod": "^4.6.7"
+  }
+}

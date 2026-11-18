@@ -1,0 +1,406 @@
+// @vitest-environment jsdom
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { flushSync, mount, tick, unmount } from "svelte";
+import App from "./App.svelte";
+import LessonPlayer from "./components/LessonPlayer.svelte";
+import { drafts } from "./lessons/drafts";
+import { lessons, lessonCount } from "./lessons";
+import { STORAGE_KEY, SCHEDULE } from "./config";
+import { addDays, formatISO } from "./lib/date";
+import { toPlain } from "./lib/markup";
+import type { Lesson } from "./lib/schema";
+import { app as store } from "./lib/store.svelte";
+
+/** End-to-end smoke tests: play lessons through the real UI in jsdom. */
+
+const q = (sel: string) => document.querySelector(sel);
+const buttons = () => Array.from(document.querySelectorAll<HTMLButtonElement>("button, a.btn"));
+const norm = (s: string) => s.replace(/\s+/g, " ").trim();
+
+function btn(text: string, opts: { exact?: boolean } = {}): HTMLButtonElement {
+  const found = buttons().find((b) => {
+    const t = norm(b.textContent ?? "");
+    return opts.exact ? t === text : t.includes(text);
+  });
+  if (!found) {
+    throw new Error(`No button "${text}". Buttons: ${buttons().map((b) => norm(b.textContent ?? "")).join(" | ")}`);
+  }
+  return found as HTMLButtonElement;
+}
+
+async function click(text: string, opts: { exact?: boolean } = {}) {
+  btn(text, opts).click();
+  flushSync();
+  await tick();
+}
+
+async function clickEl(el: HTMLElement) {
+  el.click();
+  flushSync();
+  await tick();
+}
+
+const cont = () => btn("Continue") as HTMLButtonElement;
+const page = () => document.body.textContent ?? "";
+
+/** Navigate like a real user: change the hash and let the router react. */
+async function goto(hash: string) {
+  location.hash = hash;
+  window.dispatchEvent(new HashChangeEvent("hashchange"));
+  flushSync();
+  await tick();
+}
+
+const saved = () => JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
+
+/** Pin "today" (local noon) so date-dependent screens are deterministic. Only Date is faked. */
+function setToday(iso: string) {
+  const [y, m, d] = iso.split("-").map(Number);
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date(y, m - 1, d, 12));
+}
+
+const LAUNCH = "2026-12-01";
+const ORIGINAL_LAUNCH = SCHEDULE.launchDate;
+const EVERYTHING_OPEN = "2020-01-01"; // launched long ago: every lesson is unlocked
+
+afterEach(() => {
+  vi.useRealTimers();
+  SCHEDULE.launchDate = ORIGINAL_LAUNCH;
+});
+
+beforeEach(() => {
+  window.scrollTo = () => {}; // jsdom does not implement scrolling
+  localStorage.clear();
+  store.reset(); // the store is a module singleton: wipe its in-memory state between tests
+  document.body.innerHTML = '<div id="root"></div>';
+});
+
+function mountApp() {
+  return mount(App, { target: document.getElementById("root")! });
+}
+
+/** Plays a lesson using the answers in its own data. Works for every widget except the two sandhi-only ones. */
+async function autoplay(lesson: Lesson) {
+  const plain = (t: string) => norm(toPlain(t, "both"));
+  for (const step of lesson.steps) {
+    if (step.kind === "explain") {
+      await click("Continue");
+    } else if (step.kind === "demo") {
+      if (step.widget === "reveal-cards") {
+        const cards = Array.from(document.querySelectorAll<HTMLButtonElement>(".place-btn"));
+        for (const c of cards.slice(0, step.requiredInteractions)) await clickEl(c);
+      } else if (step.widget === "word-by-word") {
+        for (const t of Array.from(document.querySelectorAll<HTMLButtonElement>(".wbw-tile"))) await clickEl(t);
+      } else {
+        throw new Error(`autoplay doesn't know widget "${step.widget}"`);
+      }
+      expect(cont().disabled, `demo ${step.id} should unlock Continue`).toBe(false);
+      await click("Continue");
+    } else if (step.kind === "exercise") {
+      if (step.type === "choice") {
+        await click(plain(step.options.find((o) => o.correct)!.text), { exact: true });
+      } else if (step.type === "tiles") {
+        for (const t of step.answer) await click(plain(t), { exact: true });
+        await click("Check");
+      } else {
+        for (const [l, r] of step.pairs) {
+          await click(plain(l), { exact: true });
+          await click(plain(r), { exact: true });
+        }
+      }
+      expect(cont().disabled, `exercise ${step.id} should unlock Continue`).toBe(false);
+      await click("Continue");
+    } else {
+      await click("Finish lesson");
+    }
+  }
+  expect(q("h1")?.textContent).toContain("Done for today");
+}
+
+describe("every published lesson can be played from start to finish", () => {
+  it.each(lessons.map((l) => [l.number, l.title, l] as const))("lesson %i: %s", async (_n, _t, lesson) => {
+    SCHEDULE.launchDate = EVERYTHING_OPEN;
+    const app = mountApp();
+    await goto(`#/day/${lesson.number}`);
+    expect(q("h1")?.textContent).toContain(lesson.title);
+
+    await autoplay(lesson);
+
+    const s = saved();
+    expect(s.completed[String(lesson.number)]).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(s.notes[String(lesson.number)]).toBeTruthy();
+    const expectedReview = lesson.steps
+      .filter((st) => st.kind === "exercise" && st.reviewItem)
+      .map((st) => `${lesson.number}:${st.id}`)
+      .sort();
+    expect(Object.keys(s.review).sort()).toEqual(expectedReview);
+    unmount(app);
+  });
+});
+
+describe("share button", () => {
+  it("copies a paste-ready message with the lesson's share-page link", async () => {
+    SCHEDULE.launchDate = EVERYTHING_OPEN;
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true });
+    const app = mountApp();
+    await goto("#/day/1");
+    await autoplay(lessons[0]);
+
+    await click("Copy share message");
+    expect(writeText).toHaveBeenCalledTimes(1);
+    const text = writeText.mock.calls[0][0] as string;
+    expect(text).toContain("Sanskrit Daily #1");
+    expect(text).toContain(lessons[0].teaser);
+    expect(text).toMatch(/\/d\/1\/$/);
+    expect(page()).toContain("Copied");
+    unmount(app);
+  });
+
+  it("shows the text to copy by hand when the clipboard is blocked", async () => {
+    SCHEDULE.launchDate = EVERYTHING_OPEN;
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText: vi.fn().mockRejectedValue(new Error("denied")) },
+      configurable: true,
+    });
+    const app = mountApp();
+    await goto("#/day/1");
+    await autoplay(lessons[0]);
+    await click("Copy share message");
+    expect(document.querySelector("textarea")?.value).toContain("Sanskrit Daily #1");
+    unmount(app);
+  });
+});
+
+describe("Lesson 1 details", () => {
+  it("is open as a preview even before a launch date exists, and shows the not-reviewed badge", async () => {
+    SCHEDULE.launchDate = null;
+    const app = mountApp();
+    await goto("#/day/1");
+    expect(q("h1")?.textContent).toContain("Say hello");
+    expect(page()).toContain("Not yet scholar-reviewed");
+
+    await click("Continue"); // hook
+    expect(cont().disabled).toBe(true); // reveal-cards demo is gated until all six words are opened
+    await click("(namaste)");
+    expect(page()).toContain("A bow to you");
+    unmount(app);
+  });
+
+  it("explains a wrong answer and keeps the learner on the question", async () => {
+    SCHEDULE.launchDate = null;
+    const app = mountApp();
+    await goto("#/day/1");
+    await click("Continue");
+    for (const c of Array.from(document.querySelectorAll<HTMLButtonElement>(".place-btn"))) await clickEl(c);
+    await click("Continue");
+    await click("Continue"); // pattern
+    // tiles (guided): wrong first
+    await click("सु (su)", { exact: true });
+    await click("Check");
+    expect(page()).toContain("Not quite");
+    unmount(app);
+  });
+});
+
+describe("Lesson 2: the 'no word for is' demo", () => {
+  it("reveals the dashed 'is' tile only once a whole sentence is open", async () => {
+    SCHEDULE.launchDate = EVERYTHING_OPEN;
+    const app = mountApp();
+    await goto("#/day/2");
+    await click("Continue");
+
+    expect(cont().disabled).toBe(true);
+    expect(document.querySelectorAll(".wbw-gap")).toHaveLength(0);
+    const tiles = Array.from(document.querySelectorAll<HTMLButtonElement>(".wbw-tile"));
+    expect(tiles).toHaveLength(6);
+    for (const [i, tile] of tiles.entries()) {
+      await clickEl(tile);
+      if (i === 1) expect(document.querySelectorAll(".wbw-gap")).toHaveLength(0); // sentence 1 not finished
+      if (i === 2) expect(document.querySelectorAll(".wbw-gap")).toHaveLength(1);
+    }
+    expect(document.querySelectorAll(".wbw-gap")).toHaveLength(2);
+    expect(page()).toContain("My name is Rāma.");
+    expect(cont().disabled).toBe(false);
+    unmount(app);
+  });
+});
+
+describe("date gating", () => {
+  it("locks everything but lesson 1 until a launch date is set — without revealing the content", async () => {
+    SCHEDULE.launchDate = null;
+    const app = mountApp();
+    await goto("#/day/2");
+    expect(page()).toContain("🔒 Lesson 2");
+    expect(page()).toContain("Unlocks after launch");
+    expect(page()).not.toContain("What is your name?");
+    expect(document.querySelector(".progress")).toBeNull(); // no lesson player
+    unmount(app);
+  });
+
+  it("shows the unlock date for a locked lesson", async () => {
+    SCHEDULE.launchDate = LAUNCH;
+    setToday(LAUNCH);
+    const app = mountApp();
+    await goto("#/day/3");
+    expect(page()).toContain("🔒 Lesson 3");
+    expect(page()).toContain(`Unlocks on ${formatISO(addDays(LAUNCH, 2))}`);
+    unmount(app);
+  });
+
+  it("unlocks a lesson on its day", async () => {
+    SCHEDULE.launchDate = LAUNCH;
+    setToday(addDays(LAUNCH, 1)); // day 2
+    const app = mountApp();
+    await goto("#/day/2");
+    expect(q("h1")?.textContent).toContain("What is your name?");
+    await goto("#/day/3");
+    expect(page()).toContain("🔒 Lesson 3");
+    unmount(app);
+  });
+
+  it("Today shows a free lesson-1 preview and the next locked lesson before launch", async () => {
+    SCHEDULE.launchDate = null;
+    const app = mountApp();
+    await goto("#/");
+    expect(q("h1")?.textContent).toBe("Today");
+    expect(page()).toContain("Preview");
+    expect(page()).toContain("Try lesson 1");
+    expect(page()).toContain("🔒 Lesson 2");
+    unmount(app);
+  });
+
+  it("Today shows lesson 1 on launch day and lesson 2 the next day", async () => {
+    SCHEDULE.launchDate = LAUNCH;
+    setToday(LAUNCH);
+    let app = mountApp();
+    await goto("#/");
+    expect(page()).toContain("Say hello");
+    expect(page()).toContain("Start today's lesson");
+    unmount(app);
+
+    document.body.innerHTML = '<div id="root"></div>';
+    setToday(addDays(LAUNCH, 1));
+    app = mountApp();
+    await goto("#/");
+    expect(page()).toContain("What is your name?");
+    unmount(app);
+  });
+
+  it("Today says 'all caught up' once every written lesson has been reached", async () => {
+    SCHEDULE.launchDate = LAUNCH;
+    setToday(addDays(LAUNCH, lessonCount)); // one day past the last lesson
+    const app = mountApp();
+    await goto("#/");
+    expect(page()).toContain("all caught up");
+    unmount(app);
+  });
+
+  it("the archive lists unlocked lessons and shows locked ones by number only", async () => {
+    SCHEDULE.launchDate = LAUNCH;
+    setToday(addDays(LAUNCH, 1)); // day 2: lessons 1–2 open
+    const app = mountApp();
+    await goto("#/archive");
+    expect(page()).toContain("Say hello");
+    expect(page()).toContain("What is your name?");
+    expect(page()).toContain("Coming up");
+    expect(page()).toContain("Lesson 3");
+    expect(page()).toContain("Lesson 7");
+    // Locked lessons' titles must not leak.
+    expect(page()).not.toContain(lessons[2].title);
+    unmount(app);
+  });
+
+  it("still says 'not written yet' for a lesson that doesn't exist", async () => {
+    SCHEDULE.launchDate = EVERYTHING_OPEN;
+    const app = mountApp();
+    await goto("#/day/999");
+    expect(page()).toContain("isn't written yet");
+    unmount(app);
+  });
+});
+
+describe("visit counter setting", () => {
+  it("says so when this copy of the site has no counter", async () => {
+    const app = mountApp();
+    await goto("#/settings");
+    expect(page()).toContain("has no visit counter");
+    unmount(app);
+  });
+});
+
+describe("Draft sandhi lesson (exercises the place-chart and sandhi widgets)", () => {
+  it("plays through the real lesson player", async () => {
+    const lesson = drafts.find((d) => d.concept === "consonant-sandhi")!;
+    const app = mount(LessonPlayer, { target: document.getElementById("root")!, props: { lesson } });
+    await tick();
+
+    // hook, places
+    await click("Continue");
+    await click("Continue");
+
+    // place chart: gated until 3 places
+    expect(cont().disabled).toBe(true);
+    await click("Lips");
+    await click("Teeth");
+    expect(cont().disabled).toBe(true);
+    await click("Palate");
+    expect(cont().disabled).toBe(false);
+    await click("Continue");
+
+    // idea, sandhi demo
+    await click("Continue");
+    expect(cont().disabled).toBe(true);
+    for (const w of ["च ca", "जयति jayati", "टीका ṭīkā", "करोति karoti"]) await click(w, { exact: true });
+    expect(page()).toContain("The t stayed");
+    await click("Continue");
+
+    // pattern
+    await click("Continue");
+
+    // guided choice
+    await click("tad ca");
+    expect(cont().disabled).toBe(true);
+    await click("tac ca");
+    await click("Continue");
+
+    // tiles
+    await click("तट् (taṭ)");
+    await click("Check");
+    expect(page()).toContain("Not quite");
+    await click("Clear");
+    await click("तच् (tac)");
+    await click("च (ca)", { exact: true });
+    await click("Check");
+    await click("Continue");
+
+    // jayati
+    await click("taj jayati");
+    await click("Continue");
+
+    // match
+    for (const [l, r] of [
+      ["च (ca)", "च् (c)"],
+      ["ट (ṭa)", "ट् (ṭ)"],
+      ["ल (la)", "ल् (l)"],
+      ["क (ka)", "stays त् (t)"],
+    ]) {
+      await click(l, { exact: true });
+      await click(r, { exact: true });
+    }
+    await click("Continue");
+
+    // why, karoti
+    await click("once, instead of twice");
+    await click("Continue");
+    await click("tat karoti");
+    await click("Continue");
+
+    await click("Finish lesson");
+    expect(q("h1")?.textContent).toContain("Done for today");
+    expect(saved().notes[String(lesson.number)]).toContain("tat + ca = tac ca");
+
+    unmount(app);
+  });
+});

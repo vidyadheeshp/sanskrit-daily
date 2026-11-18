@@ -1,0 +1,55 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Daily rebuild so each day's lesson is published without anyone lifting a finger.
+  # Runs at 00:20 UTC. The build includes lessons a couple of days ahead and the app itself
+  # unlocks each one at the learner's local midnight, so exact timing here is not critical.
+  schedule:
+    - cron: "20 0 * * *"
+  workflow_dispatch: # "Run workflow" button, for emergencies
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run check
+      - name: Build
+        run: npm run build
+        env:
+          # Project sites live at /<repo>/. For a user site or custom domain, set the repository
+          # variables BASE_PATH ("/") and SITE_URL (your domain) under Settings → Variables.
+          BASE_PATH: ${{ vars.BASE_PATH || format('/{0}/', github.event.repository.name) }}
+          SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}/', github.repository_owner, github.event.repository.name) }}
+          # Optional anonymous visit counter (GoatCounter site code). Leave the variable unset to disable.
+          VITE_GOATCOUNTER_CODE: ${{ vars.GOATCOUNTER_CODE }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
