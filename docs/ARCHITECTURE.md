@@ -49,9 +49,12 @@ visit the service worker serves everything from cache.
 ## 3. Key decisions
 
 ### 3.1 The date selects the lesson — and gates it
-`dayNumber = whole calendar days since the launch date, + 1`, computed from the user's **local**
-calendar date (year/month/day), never from a timestamp difference, so daylight-saving and
-time zones cannot shift the day by one. See `src/lib/date.ts`.
+`dayNumber = whole calendar days since the launch date, + 1`, computed on the **IST** calendar date
+(India Standard Time, UTC+5:30, no daylight saving) so that a new lesson unlocks at **12:00 AM IST for every
+learner at the same instant**, wherever they are. `istISO()` in `src/lib/date.ts` derives that date from the
+current instant, so it does not depend on the device's time-zone setting. Date arithmetic goes through
+`Date.UTC`, never timestamp differences, so daylight saving elsewhere cannot shift the day by one.
+Personal data (days practised, review due dates) still uses the learner's own local date.
 
 The release schedule lives in one file, `schedule.json` (`launchDate`, `previewLessons`,
 `publishAheadDays`), and its rules are pure functions in `src/lib/schedule.ts`:
@@ -60,7 +63,7 @@ The release schedule lives in one file, `schedule.json` (`launchDate`, `previewL
   only "Unlocks on <date>" — never its title or content. With no launch date, only the preview lesson is open.
 - **Build gate:** a Vite plugin (`vite.config.ts`, production builds only) replaces every lesson beyond
   `dayNumber(today UTC) + publishAheadDays` with an empty stub, so unreleased lessons are *not shipped*.
-  The 2-day buffer guarantees the build is ahead of every time zone, and pre-caches tomorrow for offline use.
+  The build runs on the UTC date and IST is at most one day ahead of it, so the 2-day buffer keeps the build safely ahead and pre-caches tomorrow for offline use.
 - A scheduled GitHub Action rebuilds daily, so the publish window advances without manual work
   (see [RELEASING.md](RELEASING.md)).
 - If the user's clock is wrong they simply see a different lesson. Nothing breaks, nothing is lost.

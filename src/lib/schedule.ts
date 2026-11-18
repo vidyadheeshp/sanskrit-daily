@@ -1,10 +1,10 @@
 /**
  * Release schedule — pure functions, shared by the app, the build and the tests.
  *
- *  - `launchDate` is Day 1 (local calendar date, YYYY-MM-DD). `null` means "not announced yet".
+ *  - `launchDate` is Day 1 (an IST calendar date, YYYY-MM-DD). `null` means "not announced yet".
  *  - `previewLessons` lessons are always open (the free sample), launched or not.
  *  - `publishAheadDays`: a build includes lessons up to this many days ahead of its own date, so
- *    the app can unlock each one at the learner's own local midnight in any time zone.
+ *    the app can unlock each one at 12:00 AM IST for everyone.
  */
 import { addDays, dayNumber } from "./date.ts";
 
@@ -14,7 +14,7 @@ export interface ScheduleConfig {
   publishAheadDays: number;
 }
 
-/** Highest lesson number a learner may open on their local date `today`. */
+/** Highest lesson number a learner may open on the IST date `today`. */
 export function unlockedThrough(today: string, c: ScheduleConfig): number {
   const byDate = c.launchDate ? Math.max(0, dayNumber(today, c.launchDate)) : 0;
   return Math.max(c.previewLessons, byDate);

@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { localISO } from "../lib/date";
-  import { openThrough, unlockText } from "../lib/access";
+  import { openThrough, scheduleToday, unlockText } from "../lib/access";
   import { app } from "../lib/store.svelte";
   import { allNumbers, lessons } from "../lessons";
 
-  const open = openThrough(localISO());
+  const open = openThrough(scheduleToday());
   const available = lessons.filter((l) => l.number <= open);
   const locked = allNumbers.filter((n) => n > open);
 </script>

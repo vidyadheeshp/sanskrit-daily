@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { localISO } from "../lib/date";
-  import { openThrough, unlockText } from "../lib/access";
+  import { openThrough, scheduleToday, unlockText } from "../lib/access";
   import { allNumbers, getLesson } from "../lessons";
   import LessonPlayer from "../components/LessonPlayer.svelte";
 
   let { n }: { n: number } = $props();
 
-  const today = localISO();
+  const today = scheduleToday(); // IST
   const known = $derived(allNumbers.includes(n));
   const locked = $derived(n > openThrough(today));
   const lesson = $derived(getLesson(n));

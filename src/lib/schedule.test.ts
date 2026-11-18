@@ -64,8 +64,8 @@ describe("publishThrough (what a build includes)", () => {
     expect(publishThrough("2026-12-05", base)).toBe(7);
   });
 
-  it("is always enough for learners in every time zone (UTC+14 is at most one date ahead)", () => {
-    // Build at 2026-12-04 UTC. A learner in UTC+14 can already be on 2026-12-05, i.e. day 5.
+  it("is always enough for the IST schedule date (IST is at most one date ahead of UTC)", () => {
+    // Build at 2026-12-04 UTC. By IST it can already be 2026-12-05, i.e. day 5.
     expect(publishThrough("2026-12-04", base)).toBeGreaterThanOrEqual(unlockedThrough("2026-12-05", base));
   });
 });

@@ -7,8 +7,8 @@ Two layers enforce this:
 
 1. **The build** (runs automatically every day) ships only lessons up to *today + 2 days*. Anything
    later is replaced by an empty stub, so unreleased lessons are **not in the website's code at all**.
-2. **The app** unlocks lesson N at the learner's *own local midnight*, so a learner in India and one
-   in California each get the new lesson at the right moment. A locked lesson shows
+2. **The app** unlocks lesson N at **12:00 AM IST for everyone**: a learner in India and one in
+   California get it at exactly the same moment (the schedule runs on the IST date, not the device's local date). A locked lesson shows
    "🔒 Unlocks on Fri, 4 Dec 2026" and nothing else — not even its title.
 
 The two-day head start is what makes (2) work in every time zone, and it also pre-caches tomorrow's

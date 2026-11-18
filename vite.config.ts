@@ -17,7 +17,7 @@ const schedule: ScheduleConfig = JSON.parse(
  * unreleased lessons are never shipped to the browser. (They still exist in the repo.)
  */
 function holdBackUnreleasedLessons(): Plugin {
-  const today = new Date().toISOString().slice(0, 10); // UTC; the publish-ahead buffer covers time zones
+  const today = new Date().toISOString().slice(0, 10); // UTC date; learners run on the IST date (UTC+5:30, at most one day ahead), which the buffer covers
   const through = publishThrough(today, schedule);
   let announced = false;
   return {

@@ -1,17 +1,18 @@
 <script lang="ts">
   import { SCHEDULE, MAX_REVIEW_PER_SESSION } from "../config";
   import { dayNumber, formatISO, localISO } from "../lib/date";
-  import { openThrough, unlockText } from "../lib/access";
+  import { openThrough, scheduleToday, unlockText } from "../lib/access";
   import { dueItems } from "../lib/srs";
   import { app } from "../lib/store.svelte";
   import { getLesson, lessonCount, lessons } from "../lessons";
 
-  const today = localISO();
+  const today = localISO(); // the learner's own day: used for their review schedule
+  const scheduleDay = scheduleToday(); // IST: used for which lesson is open
   const launch = SCHEDULE.launchDate;
-  const n = launch ? dayNumber(today, launch) : 0; // 0 or less = daily lessons haven't started
+  const n = launch ? dayNumber(scheduleDay, launch) : 0; // 0 or less = daily lessons haven't started
   const live = n >= 1;
   const current = live ? n : 1; // before launch, offer lesson 1 as a free preview
-  const open = openThrough(today);
+  const open = openThrough(scheduleDay);
   const lesson = current <= open ? getLesson(current) : undefined;
   const caughtUp = live && n > lessonCount;
   const nextLocked = Number.isFinite(open) && open + 1 <= lessonCount ? open + 1 : null;
@@ -26,7 +27,7 @@
   <div class="callout" role="note" style="margin-bottom: 1rem">
     <strong>Preview.</strong>
     {#if launch}
-      Daily lessons start on <strong>{formatISO(launch)}</strong>.
+      Daily lessons start on <strong>{formatISO(launch)}</strong> at 12:00 AM IST.
     {:else}
       Daily lessons start soon — the date will be announced.
     {/if}

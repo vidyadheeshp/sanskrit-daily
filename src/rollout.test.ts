@@ -28,7 +28,7 @@ describe("daily rollout workflow", () => {
 
 describe("the 18:30 UTC build is always ahead of the next IST midnight", () => {
   it("has already published the lesson that unlocks at the next 00:00 IST, for every day of a long run", () => {
-    // The build runs on UTC date D at 18:30. The next IST midnight is local date D + 1 for learners in India.
+    // The build runs on UTC date D at 18:30. The next IST midnight starts IST date D + 1 for every learner (the schedule runs on IST).
     for (let i = -10; i < 400; i++) {
       const utcDate = addDays("2026-11-19", i);
       const istDateAtNextMidnight = addDays(utcDate, 1);

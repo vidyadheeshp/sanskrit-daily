@@ -6,7 +6,7 @@ on:
   # Daily rollout at 12:00 AM IST (= 18:30 UTC the previous day; IST is UTC+5:30), so each day's
   # lesson is published without anyone lifting a finger. GitHub cron is always in UTC.
   # The build already ships lessons a couple of days ahead and the app itself unlocks each one at
-  # the learner's local midnight, so a delayed or skipped run (GitHub can lag by several minutes)
+  # 12:00 AM IST for everyone, so a delayed or skipped run (GitHub can lag by several minutes)
   # never makes a lesson late.
   schedule:
     - cron: "30 18 * * *"

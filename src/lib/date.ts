@@ -33,6 +33,18 @@ export function addDays(iso: string, n: number): string {
   return new Date(toUTC(iso) + n * 86_400_000).toISOString().slice(0, 10);
 }
 
+/** India Standard Time is UTC+5:30 and has no daylight saving. */
+export const IST_OFFSET_MINUTES = 330;
+
+/**
+ * The calendar date (YYYY-MM-DD) in India Standard Time at instant `now`.
+ * Lessons unlock at 12:00 AM IST for everyone, wherever they are, so the release schedule uses this
+ * date, not the learner's local date. Independent of the device's time-zone setting.
+ */
+export function istISO(now: Date = new Date()): string {
+  return new Date(now.getTime() + IST_OFFSET_MINUTES * 60_000).toISOString().slice(0, 10);
+}
+
 /** "Fri, 20 Nov 2026" — for showing an ISO date to people. */
 export function formatISO(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);

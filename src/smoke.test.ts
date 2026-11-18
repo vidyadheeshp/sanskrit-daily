@@ -53,11 +53,15 @@ async function goto(hash: string) {
 
 const saved = () => JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
 
-/** Pin "today" (local noon) so date-dependent screens are deterministic. Only Date is faked. */
-function setToday(iso: string) {
-  const [y, m, d] = iso.split("-").map(Number);
+/** Pin the clock to an exact instant. Only Date is faked. */
+function setInstant(iso: string) {
   vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date(y, m - 1, d, 12));
+  vi.setSystemTime(new Date(iso));
+}
+
+/** Pin "today" to noon IST on that IST date. The release schedule runs on IST, so this gives the same result on any machine. */
+function setToday(iso: string) {
+  setInstant(`${iso}T12:00:00+05:30`);
 }
 
 const LAUNCH = "2026-12-01";
@@ -236,6 +240,42 @@ describe("date gating", () => {
     expect(page()).toContain("Unlocks after launch");
     expect(page()).not.toContain("What is your name?");
     expect(document.querySelector(".progress")).toBeNull(); // no lesson player
+    unmount(app);
+  });
+
+  it("unlocks at exactly 12:00 AM IST: locked one second before, open one second after", async () => {
+    SCHEDULE.launchDate = LAUNCH; // 2026-12-01 (IST); lesson 2 unlocks 2026-12-02 00:00 IST = 2026-12-01 18:30 UTC
+
+    setInstant("2026-12-02T00:00:00+05:30");
+    document.body.innerHTML = '<div id="root"></div>';
+    let app = mountApp();
+    await goto("#/day/2");
+    expect(q("h1")?.textContent).toContain("What is your name?");
+    unmount(app);
+
+    setInstant("2026-12-01T23:59:59+05:30");
+    document.body.innerHTML = '<div id="root"></div>';
+    app = mountApp();
+    await goto("#/day/2");
+    expect(page()).toContain("🔒 Lesson 2");
+    expect(page()).toContain("12:00 AM IST");
+    expect(page()).not.toContain("What is your name?");
+    unmount(app);
+  });
+
+  it("gives a learner in another time zone the same unlock moment (UTC instants either side of 18:30)", async () => {
+    SCHEDULE.launchDate = LAUNCH;
+    setInstant("2026-12-01T18:29:59Z"); // 23:59:59 IST, but already "tomorrow" in e.g. Australia and Japan
+    let app = mountApp();
+    await goto("#/day/2");
+    expect(page()).toContain("🔒 Lesson 2");
+    unmount(app);
+
+    setInstant("2026-12-01T18:30:00Z"); // 00:00:00 IST on the 2nd
+    document.body.innerHTML = '<div id="root"></div>';
+    app = mountApp();
+    await goto("#/day/2");
+    expect(q("h1")?.textContent).toContain("What is your name?");
     unmount(app);
   });
 
