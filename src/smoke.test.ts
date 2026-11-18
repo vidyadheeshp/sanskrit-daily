@@ -77,6 +77,7 @@ beforeEach(() => {
   window.scrollTo = () => {}; // jsdom does not implement scrolling
   localStorage.clear();
   store.reset(); // the store is a module singleton: wipe its in-memory state between tests
+  store.markWelcomeSeen(); // most tests are about something other than the first-visit landing page
   document.body.innerHTML = '<div id="root"></div>';
 });
 
@@ -377,6 +378,132 @@ describe("brand", () => {
   });
 });
 
+describe("landing page (first visit only)", () => {
+  /** A brand-new visitor: has not seen the landing page and has no progress. */
+  function newVisitor() {
+    store.reset();
+  }
+
+  it("shows the landing page to a new visitor, with the main call to action", async () => {
+    newVisitor();
+    const app = mountApp();
+    await goto("#/");
+    expect(q("h1")?.textContent).toContain("Learn Sanskrit, one small step a day.");
+    expect(page()).toContain("दिने दिने");
+    expect(page()).toContain("Dine Dine · Sanskrit Daily");
+    const ctas = Array.from(document.querySelectorAll('a[href="#/day/1"]'));
+    expect(ctas.length).toBeGreaterThanOrEqual(2); // top and bottom of the page
+    unmount(app);
+  });
+
+  it("shows it only once: the next visit to the home page goes straight to Today", async () => {
+    newVisitor();
+    let app = mountApp();
+    await goto("#/");
+    expect(q("h1")?.textContent).toContain("Learn Sanskrit");
+    expect(store.state.settings.welcomeSeen).toBe(true);
+    expect(saved().settings.welcomeSeen).toBe(true); // remembered in storage, not just in memory
+    unmount(app);
+
+    document.body.innerHTML = '<div id="root"></div>';
+    app = mountApp();
+    await goto("#/");
+    expect(q("h1")?.textContent).toBe("Today");
+    unmount(app);
+  });
+
+  it("does not flip to Today while the new visitor is still reading it", async () => {
+    newVisitor();
+    const app = mountApp();
+    await goto("#/");
+    await goto("#/"); // a repeated navigation to the same page, e.g. clicking the logo
+    expect(q("h1")?.textContent).toContain("Learn Sanskrit");
+    unmount(app);
+  });
+
+  it("skips it for anyone who already has progress, even if they never saw it", async () => {
+    newVisitor();
+    store.completeLesson(1, "a rule", []);
+    const app = mountApp();
+    await goto("#/");
+    expect(q("h1")?.textContent).toBe("Today");
+    unmount(app);
+  });
+
+  it("stays reachable from the 'What is this?' link, even after it has been seen", async () => {
+    const app = mountApp(); // beforeEach already marked it as seen
+    await goto("#/");
+    expect(q("h1")?.textContent).toBe("Today");
+    const link = document.querySelector<HTMLAnchorElement>('nav a[href="#/welcome"]');
+    expect(link?.textContent).toContain("What is this?");
+    await goto("#/welcome");
+    expect(q("h1")?.textContent).toContain("Learn Sanskrit");
+    expect(document.querySelector('nav a[href="#/welcome"]')?.getAttribute("aria-current")).toBe("page");
+    unmount(app);
+  });
+
+  it("lets a visitor try a real lesson 1 word right on the page", async () => {
+    newVisitor();
+    const app = mountApp();
+    await goto("#/welcome");
+    expect(page()).toContain("Try it");
+    await click("(namaste)");
+    expect(page()).toContain("A bow to you");
+    unmount(app);
+  });
+
+  it("explains how it works, the promises, an honesty note and an FAQ", async () => {
+    newVisitor();
+    const app = mountApp();
+    await goto("#/welcome");
+    for (const t of ["Learn the why", "Play with it", "Check it stuck", "No accounts or logins", "No streaks", "not yet been reviewed by a Sanskrit scholar"]) {
+      expect(page(), t).toContain(t);
+    }
+    expect(document.querySelectorAll(".faq details").length).toBeGreaterThanOrEqual(4);
+    const external = Array.from(document.querySelectorAll<HTMLAnchorElement>('main a[target="_blank"]'));
+    expect(external.length).toBeGreaterThanOrEqual(2);
+    for (const a of external) expect(a.rel, a.href).toContain("noopener");
+    unmount(app);
+  });
+
+  it("shows the launch status before a launch date exists", async () => {
+    newVisitor();
+    SCHEDULE.launchDate = null;
+    const app = mountApp();
+    await goto("#/welcome");
+    expect(page()).toContain("start soon");
+    expect(page()).toContain("after launch");
+    unmount(app);
+  });
+
+  it("shows the launch date before launch, and the week strip locked by date", async () => {
+    newVisitor();
+    SCHEDULE.launchDate = LAUNCH;
+    setToday(addDays(LAUNCH, -3));
+    const app = mountApp();
+    await goto("#/welcome");
+    expect(page()).toContain(`Daily lessons start ${formatISO(LAUNCH)} at 12:00 AM IST`);
+    const days = Array.from(document.querySelectorAll(".week li"));
+    expect(days).toHaveLength(7);
+    expect(days[0].classList.contains("open")).toBe(true); // lesson 1 is the free preview
+    expect(days[1].textContent).toContain("🔒");
+    unmount(app);
+  });
+
+  it("opens days as they unlock and never reveals a locked lesson's title", async () => {
+    newVisitor();
+    SCHEDULE.launchDate = LAUNCH;
+    setToday(addDays(LAUNCH, 2)); // day 3
+    const app = mountApp();
+    await goto("#/welcome");
+    expect(page()).toContain("Lesson 3 is open today");
+    const open = document.querySelectorAll(".week li.open");
+    expect(open).toHaveLength(3);
+    for (const l of lessons.slice(3)) expect(page(), l.title).not.toContain(l.title);
+    unmount(app);
+  });
+});
+
 describe("Why page", () => {
   it("explains the initiative, links to lesson 1 and to the issue tracker, and is in the navigation", async () => {
     const app = mountApp();
@@ -387,8 +514,7 @@ describe("Why page", () => {
     expect(page()).toContain("A slow, steady way to learn");
     expect(page()).toContain("not yet been reviewed by a Sanskrit scholar");
 
-    const nav = document.querySelector('nav a[href="#/why"]');
-    expect(nav?.getAttribute("aria-current")).toBe("page");
+    expect(document.querySelector('nav a[href="#/welcome"]')).not.toBeNull(); // "What is this?" is in the nav
 
     expect(document.querySelector('a[href="#/day/1"]')).not.toBeNull();
     const issues = document.querySelector<HTMLAnchorElement>('a[href$="/issues"]');

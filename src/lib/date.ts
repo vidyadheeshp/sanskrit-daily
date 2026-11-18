@@ -56,6 +56,12 @@ export function formatISO(iso: string): string {
   });
 }
 
+/** "Fri 20 Nov" — compact, for small tiles. */
+export function formatISOShort(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+}
+
 /** Lesson number for a date. Launch day is 1; dates before launch give 0 or negative. */
 export function dayNumber(today: string, launch: string): number {
   return daysBetween(launch, today) + 1;

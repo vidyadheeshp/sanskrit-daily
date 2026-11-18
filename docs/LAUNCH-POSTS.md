@@ -55,6 +55,13 @@ Takes 5 minutes 👉 https://vidyadheeshp.github.io/sanskrit-daily/d/1/
 
 ---
 
+## Where should the link point?
+
+The links above go straight into lesson 1 (the share page shows a proper preview card). A brand-new visitor who arrives
+at the **home page** instead sees the one-time welcome page first: what this is, a ten-second taste, the first week, and
+the promises. For a cold audience (a LinkedIn launch post) that context may convert better: use
+`https://vidyadheeshp.github.io/sanskrit-daily/`. For the daily posts, keep linking each lesson's share page.
+
 ## Honest-tone tips
 
 - Say it is **early**. It builds trust and invites the corrections you want.

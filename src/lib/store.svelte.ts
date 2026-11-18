@@ -34,6 +34,13 @@ class AppStore {
     this.commit();
   }
 
+  /** The landing page is shown once; remember that it has been. */
+  markWelcomeSeen() {
+    if (this.state.settings.welcomeSeen) return;
+    this.state.settings.welcomeSeen = true;
+    this.commit();
+  }
+
   setCountVisits(on: boolean) {
     this.state.settings.countVisits = on;
     this.commit();

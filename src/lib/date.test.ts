@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { addDays, dayNumber, daysBetween, isValidISO, istISO, localISO } from "./date";
+import { addDays, dayNumber, daysBetween, formatISOShort, isValidISO, istISO, localISO } from "./date";
 
 describe("date maths", () => {
   it("launch day is day 1", () => {
@@ -74,5 +74,15 @@ describe("istISO (the release schedule's clock)", () => {
       expect(ahead, t.toISOString()).toBeGreaterThanOrEqual(0);
       expect(ahead, t.toISOString()).toBeLessThanOrEqual(1);
     }
+  });
+});
+
+describe("formatISOShort", () => {
+  it("gives a compact weekday, day and month", () => {
+    const s = formatISOShort("2026-11-20");
+    expect(s).toContain("20");
+    expect(s).toContain("Nov");
+    expect(s).toContain("Fri");
+    expect(s).not.toContain("2026");
   });
 });

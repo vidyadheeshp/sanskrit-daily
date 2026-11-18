@@ -33,6 +33,7 @@ describe("storage", () => {
     s.review["1:q-tac"] = { box: 2, due: "2026-11-20" };
     s.settings.script = "iast";
     s.settings.countVisits = false;
+    s.settings.welcomeSeen = true;
     expect(saveState(s, kv)).toBe(true);
     expect(loadState(kv)).toEqual(s);
   });
@@ -74,6 +75,7 @@ describe("storage", () => {
     expect(parsed?.review).toEqual({ "1:a": { box: 3, due: "2026-11-20" } });
     expect(parsed?.settings.script).toBe("both");
     expect(parsed?.settings.countVisits).toBe(true); // default when missing or invalid
+    expect(parsed?.settings.welcomeSeen).toBe(false); // default when missing
   });
 
   it("imports an exported file and rejects junk", () => {

@@ -16,7 +16,7 @@ Everything is stored in your own browser's `localStorage` under the key `sanskri
 | `completed` | lesson numbers + the local date you finished them | show "days practised", mark the archive |
 | `notes` | the recap rule from lessons you finished | "My notes" page |
 | `review` | spaced-review box and due date per item | optional quick review |
-| `settings` | script preference; whether to count your visits | display and privacy |
+| `settings` | script preference; whether to count your visits; whether you have seen the welcome page | display, privacy, and showing the welcome page only once |
 
 It never leaves your device unless **you** press *Export* and save the file yourself.
 

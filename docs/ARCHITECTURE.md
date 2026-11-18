@@ -140,9 +140,15 @@ as an **optional** "Quick review" card on the Today page, capped at 3 items so i
 becomes a chore.
 
 ### 3.6 Routing
-Hash routing (`#/`, `#/day/3`, `#/archive`, `#/notes`, `#/settings`, `#/about`).
+Hash routing (`#/`, `#/day/3`, `#/archive`, `#/notes`, `#/review`, `#/settings`, `#/why`, `#/welcome`, `#/about`).
 GitHub Pages has no SPA fallback, so path-based routes would 404 on refresh. Hash routes
 also keep working offline with no extra configuration.
+
+**First-visit landing page.** `#/` renders `Home.svelte`, which shows `Landing.svelte` **once**, to a genuinely new
+visitor — one who has not seen it (`settings.welcomeSeen`) and has no lesson progress. Everyone else gets Today.
+The decision is made once, when `Home` opens (a plain `const`, not reactive), so marking the page as seen does not
+flip it away while it is being read. `#/welcome` always shows the landing page and is linked from the navigation
+("What is this?"). Deep links such as `#/day/3` or a lesson share page bypass it.
 
 ### 3.7 Offline / PWA
 `vite-plugin-pwa` generates a Workbox service worker that pre-caches the whole app shell and

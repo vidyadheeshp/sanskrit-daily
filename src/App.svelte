@@ -5,7 +5,8 @@
   import { countingAllowed, countPage } from "./lib/counter";
   import Footer from "./components/Footer.svelte";
   import { router } from "./lib/router.svelte";
-  import Today from "./routes/Today.svelte";
+  import Home from "./routes/Home.svelte";
+  import Landing from "./routes/Landing.svelte";
   import DayPage from "./routes/DayPage.svelte";
   import Archive from "./routes/Archive.svelte";
   import Notes from "./routes/Notes.svelte";
@@ -18,7 +19,7 @@
     { href: "#/", name: "today", label: "Today" },
     { href: "#/archive", name: "archive", label: "Archive" },
     { href: "#/notes", name: "notes", label: "My notes" },
-    { href: "#/why", name: "why", label: "Why" },
+    { href: "#/welcome", name: "welcome", label: "What is this?" },
     { href: "#/settings", name: "settings", label: "Settings" },
     { href: "#/about", name: "about", label: "About" },
   ];
@@ -60,7 +61,9 @@
 
   <main>
     {#if route.name === "today"}
-      <Today />
+      <Home />
+    {:else if route.name === "welcome"}
+      <Landing />
     {:else if route.name === "day"}
       <DayPage n={route.n} />
     {:else if route.name === "archive"}

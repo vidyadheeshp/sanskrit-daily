@@ -645,3 +645,118 @@ label.radio {
   align-items: center;
   min-height: 44px;
 }
+
+/* ---------- landing page ---------- */
+.landing-hero {
+  text-align: center;
+  padding: 0.5rem 0 1.5rem;
+}
+.landing-hero .logo {
+  border-radius: 18px;
+  margin-bottom: 0.6rem;
+}
+.landing-name {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.2;
+}
+.landing-hero h1 {
+  font-size: clamp(1.7rem, 6vw, 2.4rem);
+  margin: 0.9rem auto 0.6rem;
+  max-width: 22ch;
+}
+.landing-hero .lede {
+  max-width: 34rem;
+  margin: 0 auto 1.1rem;
+  font-size: 1.1rem;
+}
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+}
+.btn-lg {
+  min-height: 52px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+}
+.steps {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.steps li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+.steps .num {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+.week {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.4rem, 1fr));
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.8rem 0 0;
+}
+.week li {
+  text-align: center;
+  padding: 0.6rem 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  font-size: 0.85rem;
+}
+.week li strong {
+  display: block;
+  font-size: 1rem;
+}
+.week li.open {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+}
+.promises {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.promises li::before {
+  content: "✓ ";
+  color: var(--ok);
+  font-weight: 700;
+}
+.faq details {
+  border-top: 1px solid var(--border);
+  padding: 0.6rem 0;
+}
+.faq summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.faq details p {
+  margin: 0.2rem 0 0.4rem;
+}
+.section {
+  margin-top: 1.6rem;
+}
