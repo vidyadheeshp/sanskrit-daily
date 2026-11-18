@@ -77,6 +77,29 @@ npm run preview        # serve dist/
 npm run post -- 3      # LinkedIn + WhatsApp text for lesson 3
 ```
 
+## Troubleshooting
+
+### Site shows 404 and the deploy job fails with "Branch \"main\" is not allowed to deploy to github-pages"
+
+The build passed but the **deploy** job was rejected. GitHub created the `github-pages` environment with a
+branch rule that doesn't include `main` (it can pick `master`, or whatever the default branch was while the
+repo was still empty). Fix:
+
+1. Repo → **Settings → Environments → github-pages**.
+2. Under **Deployment branches and tags**, either choose **No restriction**, or keep *Selected branches* and
+   **add `main`** (remove `master`).
+3. **Actions →** the failed run **→ Re-run failed jobs** (or push any commit).
+
+### Site shows 404 but the deploy job succeeded
+
+Repo → **Settings → Pages → Build and deployment → Source** must be **GitHub Actions** (not "Deploy from a branch").
+The first deploy can take a minute or two to appear.
+
+### The page loads but is blank, or assets 404
+
+Wrong base path — see *The base-path rule* above. For `https://<user>.github.io/<repo>/` it must be `/<repo>/`
+(the workflow sets this automatically).
+
 ## Limits to remember
 
 - Static files only: no secrets, no server code.
