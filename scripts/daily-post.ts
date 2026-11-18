@@ -25,7 +25,7 @@ for (const l of selected) {
   console.log(`\n--- LinkedIn ---\n`);
   console.log(
     [
-      `🪔 Sanskrit Daily · Lesson ${l.number}`,
+      `🪔 Pratyaham · Sanskrit Daily · Lesson ${l.number}`,
       ``,
       l.teaser,
       ``,
@@ -37,5 +37,5 @@ for (const l of selected) {
     ].join("\n"),
   );
   console.log(`\n--- WhatsApp ---\n`);
-  console.log([`🪔 *Sanskrit Daily #${l.number}*`, l.teaser, `${l.minutes} min, free, no login 👉 ${url}`].join("\n"));
+  console.log([`🪔 *Pratyaham · Sanskrit Daily #${l.number}*`, l.teaser, `${l.minutes} min, free, no login 👉 ${url}`].join("\n"));
 }

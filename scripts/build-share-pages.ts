@@ -31,7 +31,7 @@ function metaTags(opts: { title: string; description: string; url: string }): st
   const d = esc(opts.description);
   return [
     `<meta property="og:type" content="website" />`,
-    `<meta property="og:site_name" content="Sanskrit Daily" />`,
+    `<meta property="og:site_name" content="Pratyaham" />`,
     `<meta property="og:title" content="${t}" />`,
     `<meta property="og:description" content="${d}" />`,
     opts.url ? `<meta property="og:url" content="${esc(opts.url)}" />` : "",
@@ -48,7 +48,7 @@ function metaTags(opts: { title: string; description: string; url: string }): st
 }
 
 for (const l of lessons) {
-  const title = `Sanskrit Daily #${l.number} · ${l.title}`;
+  const title = `Pratyaham — Sanskrit Daily #${l.number} · ${l.title}`;
   const target = `${base}#/day/${l.number}`;
   const html = `<!doctype html>
 <html lang="en">
@@ -76,7 +76,7 @@ const indexPath = join(dist, "index.html");
 const index = readFileSync(indexPath, "utf8");
 if (!index.includes('property="og:title"')) {
   const tags = metaTags({
-    title: "Sanskrit Daily — one small lesson every day",
+    title: "Pratyaham — Sanskrit Daily: one small lesson every day",
     description: "A new bite-sized Sanskrit lesson every day. Free, no login, no ads.",
     url: site,
   });

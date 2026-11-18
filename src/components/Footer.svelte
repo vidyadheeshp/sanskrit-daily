@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { COUNTER_CODE } from "../config";
+  import { COUNTER_CODE, SITE_TAGLINE } from "../config";
   import { app } from "../lib/store.svelte";
   import { countingAllowed, fetchTotal } from "../lib/counter";
 
@@ -29,7 +29,7 @@
 </script>
 
 <footer class="site-footer">
-  <div>No accounts, no ads. Your progress and answers stay in this browser.</div>
+  <div><span class="dev" lang="sa">{SITE_TAGLINE}</span> · No accounts, no ads. Your progress and answers stay in this browser.</div>
   {#if COUNTER_CODE}
     <div>
       {#if enabled}

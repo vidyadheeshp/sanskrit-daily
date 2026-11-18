@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="A water drop with a dot at its centre, above ripples">
+  <title>Bindu — drop and dot</title>
+  <rect width="256" height="256" rx="56" fill="#8a3b12"/>
+  <!-- the drop -->
+  <path d="M128 40 C128 40 76 104 76 142 A52 52 0 0 0 180 142 C180 104 128 40 128 40 Z" fill="#fbf6ec"/>
+  <!-- the bindu: the dot at its heart -->
+  <circle cx="128" cy="142" r="15" fill="#8a3b12"/>
+  <!-- ripples -->
+  <ellipse cx="128" cy="212" rx="62" ry="10" fill="none" stroke="#fbf6ec" stroke-width="6" opacity="0.85"/>
+  <ellipse cx="128" cy="212" rx="34" ry="5" fill="none" stroke="#fbf6ec" stroke-width="5" opacity="0.55"/>
+</svg>

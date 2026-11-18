@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { SITE_NAME, COUNTER_CODE } from "./config";
+  import { SITE_NAME, SITE_NAME_DEV, SITE_SUBTITLE, COUNTER_CODE } from "./config";
+  import Logo from "./components/Logo.svelte";
   import { app } from "./lib/store.svelte";
   import { countingAllowed, countPage } from "./lib/counter";
   import Footer from "./components/Footer.svelte";
@@ -40,7 +41,13 @@
 <div class="shell">
   <header class="site-header">
     <div class="inner">
-      <a class="brand" href="#/">{SITE_NAME}</a>
+      <a class="brand" href="#/" aria-label="{SITE_NAME} ({SITE_SUBTITLE}) — home">
+        <Logo size={38} />
+        <span class="brand-text">
+          <span class="brand-name dev" lang="sa">{SITE_NAME_DEV}</span>
+          <span class="brand-sub">{SITE_NAME} · {SITE_SUBTITLE}</span>
+        </span>
+      </a>
       <nav aria-label="Main">
         <ul>
           {#each links as l}

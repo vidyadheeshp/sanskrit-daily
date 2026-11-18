@@ -20,7 +20,15 @@ export const COUNTER_CODE: string = String(import.meta.env.VITE_GOATCOUNTER_CODE
 /** localStorage key. Bump the suffix only with a migration. */
 export const STORAGE_KEY = "sanskrit-daily:v1";
 
-export const SITE_NAME = "Sanskrit Daily";
+/**
+ * BRAND — FROZEN (see docs/brand/BRAND.md). A test pins these exact values.
+ * Name: Pratyaham (प्रत्यहम्, "every day"). Descriptive subtitle: Sanskrit Daily.
+ */
+export const SITE_NAME = "Pratyaham";
+export const SITE_NAME_DEV = "प्रत्यहम्";
+export const SITE_SUBTITLE = "Sanskrit Daily";
+export const SITE_TAGLINE = "प्रतिदिनं संस्कृतम्";
+export const SITE_TAGLINE_EN = "Sanskrit, every day";
 
 /** Public repository (used for the "report a mistake" link). */
 export const REPO_URL = "https://github.com/vidyadheeshp/sanskrit-daily";

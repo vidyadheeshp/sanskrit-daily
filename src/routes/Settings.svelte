@@ -33,7 +33,7 @@
       return;
     }
     const parsed = parseImport(await file.text());
-    if (!parsed) message = "That file isn't a valid Sanskrit Daily progress file. Nothing was changed.";
+    if (!parsed) message = "That file isn't a valid progress file from this app. Nothing was changed.";
     else if (confirm("Replace the progress on this device with the contents of that file?")) {
       app.replace(parsed);
       message = "Progress imported.";

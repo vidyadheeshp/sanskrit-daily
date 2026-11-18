@@ -43,22 +43,27 @@ export default defineConfig({
     holdBackUnreleasedLessons(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg", "og-image.png"],
+      includeAssets: ["favicon.svg", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "og-image.png"],
       workbox: {
         // Per-lesson share pages (/d/N/) must reach the network so link-preview tags and the
         // redirect work, instead of being answered with the app shell.
         navigateFallbackDenylist: [/\/d\/\d+\/?$/],
       },
       manifest: {
-        name: "Sanskrit Daily",
-        short_name: "Sanskrit Daily",
+        name: "Pratyaham — Sanskrit Daily",
+        short_name: "Pratyaham",
         description: "One small Sanskrit lesson every day. No login, no ads.",
         theme_color: "#8a3b12",
         background_color: "#fbf6ec",
         display: "standalone",
         start_url: base,
         scope: base,
-        icons: [{ src: "favicon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }],
+        icons: [
+          { src: "favicon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
+          { src: "icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+          { src: "icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+          { src: "icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+        ],
       },
     }),
   ],

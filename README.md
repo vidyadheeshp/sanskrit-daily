@@ -1,4 +1,8 @@
-# Sanskrit Daily — one small lesson, every day
+# Pratyaham (प्रत्यहम्) — Sanskrit Daily
+
+*प्रतिदिनं संस्कृतम्* — Sanskrit, every day. One small lesson, every day.
+
+<img src="docs/brand/logo/pratyaham-logo.svg" alt="Pratyaham logo: a staircase with a lamp flame above the top step" width="96" />
 
 A free, open-source, **frontend-only** game that teaches Sanskrit one concept at a time.
 Every day there is a new lesson. You open it and play. There is no login, no account, no

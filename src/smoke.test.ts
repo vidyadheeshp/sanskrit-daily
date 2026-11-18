@@ -361,11 +361,29 @@ describe("date gating", () => {
   });
 });
 
+describe("brand", () => {
+  it("shows the logo, the Devanagari name and the English subtitle in the header, and the tagline in the footer", async () => {
+    const app = mountApp();
+    await goto("#/");
+    const brand = document.querySelector(".brand")!;
+    expect(brand.querySelector(".brand-name")?.textContent).toBe("प्रत्यहम्");
+    expect(brand.querySelector(".brand-sub")?.textContent).toContain("Pratyaham · Sanskrit Daily");
+    expect(brand.getAttribute("aria-label")).toContain("Sanskrit Daily");
+    const logo = brand.querySelector("svg.logo");
+    expect(logo).not.toBeNull();
+    expect(logo?.getAttribute("aria-hidden")).toBe("true"); // decorative: the text beside it names the site
+    expect(document.querySelector("footer")?.textContent).toContain("प्रतिदिनं संस्कृतम्");
+    unmount(app);
+  });
+});
+
 describe("Why page", () => {
   it("explains the initiative, links to lesson 1 and to the issue tracker, and is in the navigation", async () => {
     const app = mountApp();
     await goto("#/why");
-    expect(q("h1")?.textContent).toContain("Why Sanskrit Daily?");
+    expect(q("h1")?.textContent).toContain("Why Pratyaham?");
+    expect(page()).toContain("प्रत्यहम्");
+    expect(page()).toContain("means “every day”");
     expect(page()).toContain("A slow, steady way to learn");
     expect(page()).toContain("not yet been reviewed by a Sanskrit scholar");
 

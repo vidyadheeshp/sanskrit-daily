@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { REPO_URL } from "../config";
+  import { REPO_URL, SITE_NAME, SITE_NAME_DEV, SITE_SUBTITLE, SITE_TAGLINE, SITE_TAGLINE_EN } from "../config";
 </script>
 
-<h1>Why Sanskrit Daily?</h1>
+<h1>Why {SITE_NAME}?</h1>
 <p class="muted" style="font-size: 1.1rem">
   A slow, steady way to learn <span class="dev" lang="sa">संस्कृतम्</span> — one small lesson at a time.
 </p>
+<div class="callout" role="note" style="margin-bottom: 1rem">
+  <strong><span class="dev" lang="sa">{SITE_NAME_DEV}</span> ({SITE_NAME.toLowerCase()})</strong> means “every day”.
+  <span class="dev" lang="sa">{SITE_TAGLINE}</span> — {SITE_TAGLINE_EN}. {SITE_NAME} is the name; “{SITE_SUBTITLE}” says what it is.
+</div>
 
 <div class="card stack">
   <h2>The gap</h2>
