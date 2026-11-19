@@ -6,9 +6,11 @@ an astrology or "auspicious times" feature.
 
 ## Scope
 
-**Shows:** vāra (weekday), tithi (lunar day, with its fortnight), nakṣatra, yoga and karaṇa, each with the time it
-ends and what follows it, plus sunrise and sunset for the chosen place, and a short note on what a pañcāṅga is
-(significance, relevance, usage).
+**Shows (compact):** one row per limb: vāra (weekday), tithi (lunar day), nakṣatra, yoga and karaṇa. Each row has the
+Sanskrit name, a short hint where it teaches something ("Jupiter's day", "ninth · bright fortnight", "full moon") and
+when it ends, under a one-line header with the place, date, sunrise and sunset. Definitions, the full tithi wording and
+the note on what a pañcāṅga is (significance, relevance, usage) are folded into **About these terms**, one tap away.
+A test keeps the default view short (under 500 characters; it was about 975 before the compact redesign).
 
 **Deliberately does not show:** rahu kāla, muhūrta or abhijit timings, "auspicious/inauspicious" labels, horoscopes
 or predictions. A test fails if such words appear on the card. This keeps the project a language tool, not a religious
