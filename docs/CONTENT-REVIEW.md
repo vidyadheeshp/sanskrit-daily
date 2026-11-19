@@ -49,3 +49,7 @@ List sources in the lesson's `sources` field when used.
   likely route.
 - **Reporting errors:** a "Report a mistake" link per lesson that opens a pre-filled GitHub issue
   (no data leaves the device unless the learner chooses to open the link).
+
+## Kannada interface review
+
+`src/i18n/kn.ts` is an unreviewed draft. A native Kannada speaker should check: natural wording (not word-for-word), consistent terms for lesson/streak/review, placeholders and links intact, the panchang card terms, and the date/time display. When signed off, set `reviewed: true` for `kn` in `src/i18n/langs.ts` (and the test that pins it). See [I18N.md](I18N.md).

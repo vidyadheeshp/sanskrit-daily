@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { WordSentence } from "../lib/schema";
+  import { t } from "../i18n";
   import Rich from "./Rich.svelte";
 
   let {
@@ -30,16 +31,16 @@
           type="button"
           class="wbw-tile"
           class:open={isOpen(s, w)}
-          aria-label={isOpen(s, w) ? `${word.text.replace(/[{}|]/g, " ")} means ${word.gloss}` : undefined}
+          aria-label={isOpen(s, w) ? t("wbw.means", { word: word.text.replace(/[{}|]/g, " "), gloss: word.gloss }) : undefined}
           onclick={() => open(s, w)}
         >
           <span class="wbw-word"><Rich text={word.text} inline /></span>
-          <span class="wbw-gloss">{isOpen(s, w) ? word.gloss : "tap"}</span>
+          <span class="wbw-gloss">{isOpen(s, w) ? word.gloss : t("wbw.tap")}</span>
         </button>
         {#if sentence.gap && sentence.gap.after === w && allOpen(s)}
           <div class="wbw-gap pop" aria-live="polite">
             <span class="wbw-gap-label">{sentence.gap.label}</span>
-            <span class="wbw-gloss">not needed</span>
+            <span class="wbw-gloss">{t("wbw.notNeeded")}</span>
           </div>
         {/if}
       {/each}
@@ -47,11 +48,11 @@
 
     {#if allOpen(s)}
       <p style="margin: 0.7rem 0 0">
-        In English: <strong>“{sentence.english}”</strong>
+        {t("wbw.inEnglish", { text: sentence.english })}
       </p>
       {#if sentence.gap}<p class="muted" style="margin: 0.3rem 0 0"><Rich text={sentence.gap.note} inline /></p>{/if}
     {/if}
   </div>
 {/each}
 
-<p class="counter">{Math.min(revealed.length, required)} of {required} words opened</p>
+<p class="counter">{t("wbw.counter", { done: Math.min(revealed.length, required), total: required })}</p>

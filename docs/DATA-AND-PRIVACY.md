@@ -70,3 +70,7 @@ The project's principle is *learning outcomes over engagement*. Therefore:
 
 The site is served by GitHub Pages. GitHub, as the host, may keep ordinary web-server logs (such as IP
 addresses) under its own privacy policy. The app itself adds nothing to that, apart from the optional counter above.
+
+## Language preference
+
+`settings.language` (`en` or `kn`) is stored in the browser with the other settings and is included in the progress export. It is never sent anywhere.

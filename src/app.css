@@ -819,3 +819,49 @@ label.radio {
   display: block;
   font-size: 0.9rem;
 }
+
+/* ---------- language switcher and Kannada ---------- */
+.lang-switch {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.lang-switch button {
+  font: inherit;
+  font-size: 0.9rem;
+  min-height: 40px;
+  padding: 0 0.85rem;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.lang-switch button.active {
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.draft-notice {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+}
+/* Kannada letters are taller: give them room, and a font stack that has them on every platform. */
+:lang(kn) {
+  font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Kannada", "Nirmala UI", "Tunga", "Kannada Sangam MN", sans-serif;
+}
+html:lang(kn) body {
+  line-height: 1.75;
+}
+html:lang(kn) h1,
+html:lang(kn) h2,
+html:lang(kn) h3 {
+  line-height: 1.4;
+}

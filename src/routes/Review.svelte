@@ -3,6 +3,7 @@
   import { localISO } from "../lib/date";
   import { dueItems } from "../lib/srs";
   import { app } from "../lib/store.svelte";
+  import { t } from "../i18n";
   import { getLesson } from "../lessons";
   import type { ExerciseStep } from "../lib/schema";
   import ExerciseStepView from "../components/ExerciseStep.svelte";
@@ -32,30 +33,30 @@
   }
 </script>
 
-<h1>Quick review</h1>
+<h1>{t("review.title")}</h1>
 
 {#if queue.length === 0}
   <div class="card stack">
-    <p>Nothing to review right now. 🌿</p>
-    <a class="btn btn-primary" href="#/">Back home</a>
+    <p>{t("review.empty")}</p>
+    <a class="btn btn-primary" href="#/">{t("common.backHome")}</a>
   </div>
 {:else if pos >= queue.length}
   <div class="card stack">
-    <h2>That's it for now 🌿</h2>
-    <p>These questions will come back later, spaced further apart each time you get them right.</p>
-    <a class="btn btn-primary" href="#/">Back home</a>
+    <h2>{t("review.done.title")}</h2>
+    <p>{t("review.done.body")}</p>
+    <a class="btn btn-primary" href="#/">{t("common.backHome")}</a>
   </div>
 {:else}
-  <p class="muted">Question {pos + 1} of {queue.length}. No hints here — just recall.</p>
+  <p class="muted">{t("review.progress", { pos: pos + 1, total: queue.length })}</p>
   <div class="card">
     {#key queue[pos].id}
       <ExerciseStepView step={queue[pos].step} showHint={false} {onDone} />
     {/key}
   </div>
   <div class="step-actions">
-    <a class="btn btn-quiet" href="#/">Stop for now</a>
+    <a class="btn btn-quiet" href="#/">{t("review.stop")}</a>
     <button type="button" class="btn btn-primary" disabled={!answered} onclick={next}>
-      {pos === queue.length - 1 ? "Finish" : "Next →"}
+      {pos === queue.length - 1 ? t("review.finish") : t("review.next")}
     </button>
   </div>
 {/if}

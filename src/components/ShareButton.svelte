@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Lesson } from "../lib/schema";
   import { shareText, shareUrl } from "../lib/share";
+  import { t } from "../i18n";
 
   let { lesson }: { lesson: Lesson } = $props();
 
@@ -30,14 +31,14 @@
 
 <div class="stack">
   <div class="row">
-    <button type="button" class="btn" onclick={copy}>📋 Copy share message</button>
-    {#if canShare}<button type="button" class="btn" onclick={nativeShare}>Share…</button>{/if}
+    <button type="button" class="btn" onclick={copy}>{t("share.copy")}</button>
+    {#if canShare}<button type="button" class="btn" onclick={nativeShare}>{t("share.native")}</button>{/if}
   </div>
   <div aria-live="polite">
     {#if status === "copied"}
-      <p class="muted" style="margin: 0">Copied — paste it into WhatsApp, LinkedIn or anywhere.</p>
+      <p class="muted" style="margin: 0">{t("share.copied")}</p>
     {:else if status === "manual"}
-      <p class="muted" style="margin: 0 0 0.3rem">Copy this message:</p>
+      <p class="muted" style="margin: 0 0 0.3rem">{t("share.manual")}</p>
       <textarea readonly rows="3" style="width: 100%; font: inherit" onfocus={(e) => e.currentTarget.select()}>{text}</textarea>
     {/if}
   </div>

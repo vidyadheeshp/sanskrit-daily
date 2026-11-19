@@ -1,31 +1,22 @@
 <script lang="ts">
-  // Static page — no logic needed.
+  import { SITE_NAME } from "../config";
+  import { t } from "../i18n";
 </script>
 
-<h1>About</h1>
-<p><a href="#/why">Why does Dine Dine exist? →</a></p>
+<h1>{t("about.title")}</h1>
+<p><a href="#/why">{t("about.whyLink", { name: SITE_NAME })}</a></p>
 
 <div class="card stack">
-  <h2>What this is</h2>
-  <p>
-    A free, open-source game that teaches Sanskrit one small idea at a time. A new lesson appears each day. Every lesson
-    explains the idea, lets you play with it, and then checks that it stuck.
-  </p>
+  <h2>{t("about.what.title")}</h2>
+  <p>{t("about.what.body")}</p>
 </div>
 
 <div class="card stack">
-  <h2>What it will never do</h2>
-  <p>
-    No accounts, no tracking, no ads, no notifications, no streaks that reset, no leaderboards. A lesson always ends. Your
-    progress stays in your own browser.
-  </p>
+  <h2>{t("about.never.title")}</h2>
+  <p>{t("about.never.body")}</p>
 </div>
 
 <div class="card stack">
-  <h2>Scholar review</h2>
-  <p>
-    Lessons marked <span class="chip warn">Not yet scholar-reviewed</span> have not been checked by a trained Sanskrit
-    scholar. Treat them as a friendly first draft. If you spot a mistake, please tell us — it is the most useful thing you
-    can do.
-  </p>
+  <h2>{t("about.review.title")}</h2>
+  <p>{t("about.review.body", { label: t("lesson.notReviewed") })}</p>
 </div>

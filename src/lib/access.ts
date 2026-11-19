@@ -1,4 +1,5 @@
-import { SCHEDULE, UNLOCK_ALL, UNLOCK_HOUR_IST, UNLOCK_TIME_LABEL } from "../config";
+import { SCHEDULE, UNLOCK_ALL, UNLOCK_HOUR_IST } from "../config";
+import { locale, t, unlockTime } from "../i18n";
 import { formatISO, scheduleISO } from "./date";
 import { unlockDate, unlockedThrough } from "./schedule";
 
@@ -13,5 +14,5 @@ export function openThrough(today: string): number {
 /** Human text for when a locked lesson opens. Never reveals the lesson's content. */
 export function unlockText(n: number): string {
   const d = unlockDate(n, SCHEDULE);
-  return d ? `Unlocks on ${formatISO(d)} at ${UNLOCK_TIME_LABEL}` : "Unlocks after launch — date to be announced";
+  return d ? t("unlock.on", { date: formatISO(d, locale()), time: unlockTime() }) : t("unlock.after");
 }

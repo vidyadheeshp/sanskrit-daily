@@ -1,12 +1,14 @@
 <script lang="ts">
   import type { RecapStep } from "../lib/schema";
   import { app } from "../lib/store.svelte";
+  import { t } from "../i18n";
+  import Msg from "./Msg.svelte";
   import Rich from "./Rich.svelte";
 
   let { step }: { step: RecapStep } = $props();
 </script>
 
-<h2>Remember this</h2>
+<h2>{t("recap.title")}</h2>
 <div class="rule-box">
   <Rich text={step.rule} />
   {#if step.example}
@@ -16,7 +18,4 @@
     </div>
   {/if}
 </div>
-<p class="muted" style="margin-top: 0.8rem">
-  Finishing saves this rule to <strong>My Notes</strong> on this device and brings a few questions back for a
-  quick review later.
-</p>
+<p class="muted" style="margin-top: 0.8rem"><Msg k="recap.note" /></p>

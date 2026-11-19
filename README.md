@@ -102,3 +102,7 @@ docs/              all project documentation
 - **Code:** [AGPL-3.0](LICENSE).
 - **Lesson content** (the text in `src/lessons/`): a licence has not been chosen yet, so all rights are
   reserved for now. Please ask before reusing lesson text. See [docs/CONTENT-REVIEW.md](docs/CONTENT-REVIEW.md).
+
+## Languages
+
+English by default; Kannada (draft, interface only) is opt-in from the header or Settings. See [docs/I18N.md](docs/I18N.md).

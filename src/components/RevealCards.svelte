@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { RevealCard } from "../lib/schema";
+  import { t } from "../i18n";
   import Rich from "./Rich.svelte";
 
   let {
@@ -26,7 +27,7 @@
   {#each cards as c, i}
     <button type="button" class="place-btn" aria-pressed={selected === i} onclick={() => pick(i)}>
       <span><Rich text={c.word} inline /></span>
-      {#if seen.includes(i)}<span class="seen" aria-label="explored">✓</span>{/if}
+      {#if seen.includes(i)}<span class="seen" aria-label={t("reveal.explored.aria")}>✓</span>{/if}
     </button>
   {/each}
 </div>
@@ -34,7 +35,7 @@
 <div aria-live="polite">
   {#if current}
     <div class="card" style="margin-top: 0.9rem">
-      <p class="muted" style="margin-bottom: 0.3rem">Built from:</p>
+      <p class="muted" style="margin-bottom: 0.3rem">{t("reveal.builtFrom")}</p>
       <div class="row" style="margin-bottom: 0.6rem">
         {#each current.parts as part, j}
           {#if j > 0}<span class="arrow" aria-hidden="true">+</span>{/if}
@@ -45,9 +46,9 @@
         {/each}
       </div>
       <p style="margin-bottom: 0.3rem"><strong><Rich text={current.meaning} inline /></strong></p>
-      <p class="muted" style="margin: 0"><Rich text={"When: " + current.use} inline /></p>
+      <p class="muted" style="margin: 0"><Rich text={t("reveal.when", { use: current.use })} inline /></p>
     </div>
   {/if}
 </div>
 
-<p class="counter">{Math.min(seen.length, required)} of {required} words explored</p>
+<p class="counter">{t("reveal.counter", { done: Math.min(seen.length, required), total: required })}</p>

@@ -1,7 +1,10 @@
 <script lang="ts">
-  import { COUNTER_CODE, SITE_TAGLINE } from "../config";
+  import { COUNTER_CODE, REPO_URL, SITE_TAGLINE } from "../config";
   import { app } from "../lib/store.svelte";
   import { countingAllowed, fetchTotal } from "../lib/counter";
+  import { t } from "../i18n";
+  import { languageInfo } from "../i18n/langs";
+  import Msg from "./Msg.svelte";
 
   let total = $state<string | null>(null);
 
@@ -29,16 +32,18 @@
 </script>
 
 <footer class="site-footer">
-  <div><span class="dev" lang="sa">{SITE_TAGLINE}</span> · No accounts, no ads. Your progress and answers stay in this browser.</div>
+  <div><span class="dev" lang="sa">{SITE_TAGLINE}</span> · {t("footer.privacy")}</div>
   {#if COUNTER_CODE}
     <div>
       {#if enabled}
-        Visits are counted anonymously (no cookies, nothing about what you answer) —
-        <a href="#/settings">switch off</a>.
-        {#if total}<strong>👣 {total}</strong> visitors so far.{/if}
+        <Msg k="footer.counterOn" />
+        {#if total}{" "}<Msg k="footer.visitors" p={{ total }} />{/if}
       {:else}
-        Visit counting is off.
+        {t("footer.counterOff")}
       {/if}
     </div>
+  {/if}
+  {#if !languageInfo(app.language).reviewed}
+    <div class="draft-notice" lang={app.language}><Msg k="lang.draft" p={{ repo: REPO_URL }} /></div>
   {/if}
 </footer>

@@ -233,3 +233,7 @@ subsetted Noto Sans Devanagari is a planned improvement (see ROADMAP in CURRICUL
 - **Content is bundled**, so total lessons × size grows the JS bundle. At ~3 KB/lesson,
   365 lessons ≈ 1 MB uncompressed; if that becomes a problem, lessons can be switched to
   lazy `import()` chunks without changing the schema.
+
+## Interface translation
+
+`src/i18n/` holds the catalogs (`en.ts` source of truth, `kn.ts` typed `Record<Key, string>`), `t()`/`dyn()`, and the safe markup parser used by `components/Msg.svelte`. `App.svelte` keys the page on the language. Details: [I18N.md](I18N.md).

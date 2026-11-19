@@ -6,6 +6,7 @@ import { STORAGE_KEY } from "../config";
 import { isValidISO } from "./date";
 import type { Card } from "./srs";
 import type { ScriptSetting } from "./markup";
+import { DEFAULT_LANG, isLang, type Lang } from "../i18n/langs";
 
 export interface State {
   version: 1;
@@ -15,7 +16,7 @@ export interface State {
   notes: Record<string, string>;
   /** "<lesson>:<stepId>" → review card */
   review: Record<string, Card>;
-  settings: { script: ScriptSetting; countVisits: boolean; welcomeSeen: boolean; showPanchang: boolean };
+  settings: { script: ScriptSetting; countVisits: boolean; welcomeSeen: boolean; showPanchang: boolean; language: Lang };
 }
 
 export interface KV {
@@ -25,7 +26,7 @@ export interface KV {
 }
 
 export function defaultState(): State {
-  return { version: 1, completed: {}, notes: {}, review: {}, settings: { script: "both", countVisits: true, welcomeSeen: false, showPanchang: true } };
+  return { version: 1, completed: {}, notes: {}, review: {}, settings: { script: "both", countVisits: true, welcomeSeen: false, showPanchang: true, language: DEFAULT_LANG } };
 }
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -72,6 +73,9 @@ export function parseState(raw: unknown): State | null {
   }
   if (isRecord(raw.settings) && typeof raw.settings.showPanchang === "boolean") {
     out.settings.showPanchang = raw.settings.showPanchang;
+  }
+  if (isRecord(raw.settings) && isLang(raw.settings.language)) {
+    out.settings.language = raw.settings.language;
   }
   return out;
 }

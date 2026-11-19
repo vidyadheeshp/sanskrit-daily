@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ExerciseStep } from "../lib/schema";
+  import { t } from "../i18n";
   import Rich from "./Rich.svelte";
   import ChoiceExercise from "./ChoiceExercise.svelte";
   import TilesExercise from "./TilesExercise.svelte";
@@ -22,9 +23,9 @@
 
 {#if showHint && step.hint}
   {#if hintOpen}
-    <div class="callout" role="note"><strong>Hint:</strong> <Rich text={step.hint} inline /></div>
+    <div class="callout" role="note"><strong>{t("exercise.hint")}</strong> <Rich text={step.hint} inline /></div>
   {:else}
-    <button type="button" class="btn btn-quiet" onclick={() => (hintOpen = true)}>Need a hint?</button>
+    <button type="button" class="btn btn-quiet" onclick={() => (hintOpen = true)}>{t("exercise.needHint")}</button>
   {/if}
 {/if}
 

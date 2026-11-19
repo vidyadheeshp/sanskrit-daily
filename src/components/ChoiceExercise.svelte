@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ChoiceStep } from "../lib/schema";
+  import { t } from "../i18n";
   import Rich from "./Rich.svelte";
 
   let { step, onDone }: { step: ChoiceStep; onDone: (firstTry: boolean) => void } = $props();
@@ -22,7 +23,7 @@
   }
 </script>
 
-<div class="options" role="group" aria-label="Answers">
+<div class="options" role="group" aria-label={t("choice.answers")}>
   {#each step.options as opt, i}
     <button
       type="button"
@@ -32,8 +33,8 @@
       disabled={solved || tried.includes(i)}
       onclick={() => pick(i)}
     >
-      {#if tried.includes(i) && !opt.correct}<span aria-hidden="true">✗ </span><span class="visually-hidden">Incorrect: </span>{/if}
-      {#if solved && opt.correct}<span aria-hidden="true">✓ </span><span class="visually-hidden">Correct: </span>{/if}
+      {#if tried.includes(i) && !opt.correct}<span aria-hidden="true">✗ </span><span class="visually-hidden">{t("choice.incorrect")}</span>{/if}
+      {#if solved && opt.correct}<span aria-hidden="true">✓ </span><span class="visually-hidden">{t("choice.correct")}</span>{/if}
       <Rich text={opt.text} inline />
     </button>
   {/each}
@@ -43,7 +44,7 @@
   {#if last !== null}
     {@const opt = step.options[last]}
     <div class="feedback" class:good={opt.correct} class:bad={!opt.correct}>
-      <strong>{opt.correct ? "Yes!" : "Not quite — try another."}</strong>
+      <strong>{opt.correct ? t("choice.yes") : t("choice.notQuite")}</strong>
       <Rich text={opt.why} inline />
     </div>
   {/if}

@@ -45,9 +45,9 @@ export function istISO(now: Date = new Date()): string {
 }
 
 /** "Fri, 20 Nov 2026" — for showing an ISO date to people. */
-export function formatISO(iso: string): string {
+export function formatISO(iso: string, locale = "en-GB"): string {
   const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString("en-GB", {
+  return new Date(y, m - 1, d).toLocaleDateString(locale, {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -65,9 +65,9 @@ export function scheduleISO(now: Date, unlockHourIST: number): string {
 }
 
 /** "Fri 20 Nov" — compact, for small tiles. */
-export function formatISOShort(iso: string): string {
+export function formatISOShort(iso: string, locale = "en-GB"): string {
   const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+  return new Date(y, m - 1, d).toLocaleDateString(locale, { weekday: "short", day: "numeric", month: "short" });
 }
 
 /** Lesson number for a date. Launch day is 1; dates before launch give 0 or negative. */

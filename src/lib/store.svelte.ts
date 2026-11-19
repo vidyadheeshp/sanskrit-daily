@@ -3,6 +3,7 @@ import { localISO } from "./date";
 import { clearPlace } from "./place";
 import { newCard, grade } from "./srs";
 import type { ScriptSetting } from "./markup";
+import type { Lang } from "../i18n/langs";
 
 class AppStore {
   state = $state<State>(loadState());
@@ -39,6 +40,21 @@ class AppStore {
   markWelcomeSeen() {
     if (this.state.settings.welcomeSeen) return;
     this.state.settings.welcomeSeen = true;
+    this.commit();
+  }
+
+  /** The interface language. English is the default; learners opt in to another. */
+  get language(): Lang {
+    return this.state.settings.language;
+  }
+
+  /** `lang` attribute for lesson text, which is English-only for now: undefined (inherit) when the interface is English. */
+  get lessonLang(): string | undefined {
+    return this.state.settings.language === "en" ? undefined : "en";
+  }
+
+  setLanguage(l: Lang) {
+    this.state.settings.language = l;
     this.commit();
   }
 

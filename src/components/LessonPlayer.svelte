@@ -2,6 +2,8 @@
   import { tick } from "svelte";
   import type { Lesson, RecapStep } from "../lib/schema";
   import { app } from "../lib/store.svelte";
+  import { t, type Key } from "../i18n";
+  import Msg from "./Msg.svelte";
   import Rich from "./Rich.svelte";
   import ShareButton from "./ShareButton.svelte";
   import ExplainStepView from "./ExplainStep.svelte";
@@ -21,17 +23,18 @@
   const isLast = $derived(index === total - 1);
   const canContinue = $derived(step.kind === "explain" || step.kind === "recap" || done[step.id] === true);
 
-  const stage = $derived(
+  const stageKey = $derived<Key>(
     step.kind === "explain"
-      ? "Learn"
+      ? "stage.learn"
       : step.kind === "demo"
-        ? "Explore"
+        ? "stage.explore"
         : step.kind === "exercise"
           ? step.guided
-            ? "Try it"
-            : "Prove it"
-          : "Remember",
+            ? "stage.try"
+            : "stage.prove"
+          : "stage.remember",
   );
+  const stage = $derived(t(stageKey));
 
   async function go(delta: number) {
     index += delta;
@@ -57,39 +60,41 @@
 {#if finished}
   {@const recap = lesson.steps[total - 1] as RecapStep}
   <section class="card stack" aria-labelledby="done-h">
-    <h1 id="done-h">Done for today 🌿</h1>
-    <p>Nicely done. That is the whole lesson — there is nothing more to do, and no streak to protect.</p>
+    <h1 id="done-h">{t("done.title")}</h1>
+    <p>{t("done.body")}</p>
     <div class="rule-box"><Rich text={recap.rule} /></div>
     <p class="muted">
-      Saved to My Notes on this device. You have practised on <strong>{app.daysPractised}</strong>
-      {app.daysPractised === 1 ? "day" : "days"} in total.
+      <Msg k={app.daysPractised === 1 ? "done.practised.one" : "done.practised.many"} p={{ n: app.daysPractised }} />
     </p>
     <div class="row">
-      <a class="btn btn-primary" href="#/">Back home</a>
-      <a class="btn" href="#/notes">My notes</a>
-      <a class="btn" href="#/archive">Archive</a>
+      <a class="btn btn-primary" href="#/">{t("common.backHome")}</a>
+      <a class="btn" href="#/notes">{t("nav.notes")}</a>
+      <a class="btn" href="#/archive">{t("common.archive")}</a>
     </div>
-    <h2 style="margin-top: 0.5rem">Know someone who'd enjoy this?</h2>
+    <h2 style="margin-top: 0.5rem">{t("done.share")}</h2>
     <ShareButton {lesson} />
   </section>
 {:else}
   <header class="stack" style="margin-bottom: 1rem">
     <div class="row spread">
-      <span class="chip">Lesson {lesson.number} · ~{lesson.minutes} min</span>
-      {#if !lesson.reviewed}<span class="chip warn" title="See About for what this means">Not yet scholar-reviewed</span>{/if}
+      <span class="chip">{t("common.lessonMeta", { n: lesson.number, minutes: lesson.minutes })}</span>
+      {#if !lesson.reviewed}<span class="chip warn" title={t("lesson.notReviewedTitle")}>{t("lesson.notReviewed")}</span>{/if}
     </div>
-    <h1>{lesson.title}</h1>
+    <h1 lang={app.lessonLang}>{lesson.title}</h1>
+    {#if app.lessonLang}
+      <div class="callout" role="note"><Msg k="lang.lessonsEnglish" /></div>
+    {/if}
     <div
       class="progress"
       role="progressbar"
       aria-valuemin="1"
       aria-valuemax={total}
       aria-valuenow={index + 1}
-      aria-label="Lesson progress"
+      aria-label={t("lesson.progress.aria")}
     >
       <div style="width: {((index + 1) / total) * 100}%"></div>
     </div>
-    <div class="muted" style="font-size: 0.9rem">Step {index + 1} of {total}</div>
+    <div class="muted" style="font-size: 0.9rem">{t("lesson.step", { n: index + 1, total })}</div>
   </header>
 
   <section class="card" bind:this={panel} tabindex="-1" aria-label={stage} style="outline: none">
@@ -108,14 +113,14 @@
   </section>
 
   <div class="step-actions">
-    <button type="button" class="btn btn-quiet" disabled={index === 0} onclick={() => go(-1)}>← Back</button>
+    <button type="button" class="btn btn-quiet" disabled={index === 0} onclick={() => go(-1)}>{t("lesson.back")}</button>
     <button type="button" class="btn btn-primary" disabled={!canContinue} onclick={next}>
-      {isLast ? "Finish lesson" : "Continue →"}
+      {isLast ? t("lesson.finish") : t("lesson.continue")}
     </button>
   </div>
   {#if !canContinue}
     <p class="muted" style="text-align: right; font-size: 0.9rem; margin-top: 0.4rem">
-      {step.kind === "demo" ? "Finish exploring to continue." : "Answer correctly to continue."}
+      {step.kind === "demo" ? t("lesson.hint.demo") : t("lesson.hint.answer")}
     </p>
   {/if}
 {/if}

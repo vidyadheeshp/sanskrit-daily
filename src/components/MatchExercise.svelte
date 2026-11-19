@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { MatchStep } from "../lib/schema";
   import { seededShuffle } from "../lib/shuffle";
+  import { t } from "../i18n";
   import Rich from "./Rich.svelte";
 
   let { step, onDone }: { step: MatchStep; onDone: (firstTry: boolean) => void } = $props();
@@ -42,7 +43,7 @@
   const isSel = (side: "L" | "R", i: number) => selection?.side === side && selection.i === i;
 </script>
 
-<p class="muted" style="margin-bottom: 0">Tap one item on the left, then its partner on the right.</p>
+<p class="muted" style="margin-bottom: 0">{t("match.help")}</p>
 <div class="match-grid">
   <div class="match-col">
     {#each left as item (item.i)}
@@ -76,11 +77,11 @@
 
 <div aria-live="polite">
   {#if miss}
-    <div class="feedback bad"><strong>Not a pair.</strong> Think about where each sound is made, then try again.</div>
+    <div class="feedback bad"><strong>{t("match.notPair")}</strong> {t("match.again")}</div>
   {/if}
   {#if solved}
     <div class="feedback good">
-      <strong>All matched!</strong>
+      <strong>{t("match.all")}</strong>
       {#if step.why}<Rich text={step.why} inline />{/if}
     </div>
   {/if}

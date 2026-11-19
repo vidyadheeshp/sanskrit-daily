@@ -1,5 +1,6 @@
 <script lang="ts">
   import { openThrough, scheduleToday, unlockText } from "../lib/access";
+  import { t } from "../i18n";
   import { allNumbers, getLesson } from "../lessons";
   import LessonPlayer from "../components/LessonPlayer.svelte";
 
@@ -13,18 +14,18 @@
 
 {#if !known}
   <div class="card stack">
-    <h1>Lesson {n} isn't written yet</h1>
-    <p>That lesson doesn't exist (yet). Try the archive.</p>
-    <a class="btn btn-primary" href="#/archive">Open the archive</a>
+    <h1>{t("day.missing.title", { n })}</h1>
+    <p>{t("day.missing.body")}</p>
+    <a class="btn btn-primary" href="#/archive">{t("common.openArchive")}</a>
   </div>
 {:else if locked}
   <div class="card stack">
-    <h1>🔒 Lesson {n}</h1>
+    <h1>{t("day.locked.title", { n })}</h1>
     <p><strong>{unlockText(n)}.</strong></p>
-    <p class="muted">Good things come one day at a time. Come back then — or revisit an earlier lesson in the meantime.</p>
+    <p class="muted">{t("day.locked.body")}</p>
     <div class="row">
-      <a class="btn btn-primary" href="#/">Back to today</a>
-      <a class="btn" href="#/archive">Archive</a>
+      <a class="btn btn-primary" href="#/">{t("common.backToday")}</a>
+      <a class="btn" href="#/archive">{t("common.archive")}</a>
     </div>
   </div>
 {:else if lesson}
@@ -33,8 +34,8 @@
   {/key}
 {:else}
   <div class="card stack">
-    <h1>Lesson {n} isn't available yet</h1>
-    <p>Please check back soon.</p>
-    <a class="btn btn-primary" href="#/">Back to today</a>
+    <h1>{t("day.unavailable.title", { n })}</h1>
+    <p>{t("day.unavailable.body")}</p>
+    <a class="btn btn-primary" href="#/">{t("common.backToday")}</a>
   </div>
 {/if}
