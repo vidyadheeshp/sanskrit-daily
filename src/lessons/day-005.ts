@@ -9,8 +9,8 @@ export const lesson: Lesson = {
   rhythm: "build",
   minutes: 6,
   prerequisites: [4],
-  credits: ["Draft written with Claude — awaiting contributor and scholar review"],
-  reviewed: false,
+  credits: ["Draft written with Claude; reviewed by the project owner"],
+  reviewed: true,
   sources: [
     "Question-and-answer pairs adapted from the “Simple Sanskrit sentences” page of Samskrita Bharati's “Mama Bhāṣā Saṃskṛtam” leaflet (Jana Ganana 2026); to be verified by a reviewer",
   ],
@@ -63,7 +63,7 @@ export const lesson: Lesson = {
       ].join("\n"),
       callout: {
         tone: "note",
-        text: "Why {जलं|jalaṃ} ends in a dot is the subject of the next-but-one lesson. For now, just use the words as given.",
+        text: "Why {जलं|jalaṃ} ends in a dot is the subject of the next lesson. For now, just use the words as given.",
       },
     },
     {
