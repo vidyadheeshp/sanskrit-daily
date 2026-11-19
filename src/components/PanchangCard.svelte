@@ -7,7 +7,9 @@
   import { clearPlace, loadPlace, roundCoord, savePlace, type SavedPlace } from "../lib/place";
 
   /**
-   * "Today in the Sanskrit calendar": a language-first card of the five limbs of the day.
+   * "Today in the Sanskrit calendar": a compact, language-first card of the five limbs of the day.
+   * Compact by design: one or two lines per term. Definitions and the note on what a pañcāṅga is live in the
+   * collapsed "About these terms" section.
    * Deliberately NOT included: auspicious/inauspicious timings, rahu kāla, muhūrta or any prediction.
    * Calculated entirely in the browser. Location is optional, opt-in, rounded, and never leaves the device.
    */
@@ -36,6 +38,14 @@
     return `${c.y}-${pad(c.m)}-${pad(c.d)}` !== pc.date;
   });
 
+  /** One short, accurate line of meaning beside the term (language value: ordinals and planets). */
+  const tithiHint = $derived.by(() => {
+    const n = pc.tithi.number;
+    if (n === 15) return "full moon";
+    if (n === 30) return "new moon";
+    return `${pc.tithi.term.gloss} · ${n <= 15 ? "bright" : "dark"} fortnight`;
+  });
+  /** The longer wording, shown in "About these terms". */
   const tithiDetail = $derived.by(() => {
     const n = pc.tithi.number;
     if (n === 15) return "Full moon: the last day of the bright fortnight";
@@ -44,15 +54,16 @@
   });
 
   const limbs = $derived<
-    Array<{ key: string; name: string; dev: string; what: string; term: Term; detail?: string; limb?: Limb }>
+    Array<{ key: string; name: string; dev: string; what: string; term: Term; hint?: string; detail?: string; limb?: Limb }>
   >([
-    { key: "vara", name: "Vāra", dev: "वार", what: "the day of the week", term: pc.vara.term, detail: pc.vara.term.gloss },
+    { key: "vara", name: "Vāra", dev: "वार", what: "the day of the week", term: pc.vara.term, hint: pc.vara.term.short, detail: pc.vara.term.gloss },
     {
       key: "tithi",
       name: "Tithi",
       dev: "तिथि",
       what: "the lunar day: the Moon gains 12° on the Sun, so there are 30 in a cycle",
       term: pc.tithi.term,
+      hint: tithiHint,
       detail: tithiDetail,
       limb: pc.tithi,
     },
@@ -130,18 +141,33 @@
     <span class="chip" style="margin-left: 0.5rem"><span class="dev" lang="sa">पञ्चाङ्ग</span></span>
   </summary>
 
-  <p class="muted" style="margin: 0.6rem 0 0.3rem">
-    📍 <strong>{place.label}</strong>{#if coords} ({coords}){/if} · {formatISOShort(pc.date)}
+  <p class="where">
+    📍 {place.label}{#if coords}{" "}({coords}){:else if !saved}{" "}(default){/if} · {formatISOShort(pc.date)}
     {#if pc.sunrise}· sunrise {time(pc.sunrise)}{/if}
     {#if pc.sunset}· sunset {time(pc.sunset)}{/if}
+    {#if beforeSunrise && pc.sunrise}<br />Before sunrise, so this is still yesterday's panchang.{/if}
   </p>
-  {#if beforeSunrise && pc.sunrise}
-    <p class="muted" style="margin: 0 0 0.3rem; font-size: 0.9rem">
-      The traditional day begins at sunrise, so until {time(pc.sunrise)} this is still yesterday's panchang.
+
+  <dl>
+    {#each limbs as l (l.key)}
+      <div class="limb">
+        <dt>{l.name}</dt>
+        <dd>
+          <span class="big">{@render sk(l.term)}</span>
+          {#if l.hint}<span class="hint">{l.hint}</span>{/if}
+          {#if l.limb}<span class="until">until {endText(l.limb.endsAt)}</span>{/if}
+        </dd>
+      </div>
+    {/each}
+  </dl>
+
+  {#if anyCloseCall}
+    <p class="muted" style="margin: 0.3rem 0 0; font-size: 0.9rem">
+      ⚠ One of these changes within minutes of sunrise, so other almanacs may name it differently today.
     </p>
   {/if}
 
-  <div class="row" style="margin: 0.4rem 0">
+  <div class="row controls">
     <button type="button" class="btn" onclick={() => locate()}>
       📍 {saved?.mode === "device" ? "Update my location" : "Use my location"}
     </button>
@@ -156,64 +182,40 @@
   </div>
   <div aria-live="polite">
     {#if status === "locating"}
-      <p class="muted" style="margin: 0">Finding your location…</p>
+      <p class="muted" style="margin: 0.3rem 0 0">Finding your location…</p>
     {:else if status === "denied"}
-      <p class="muted" style="margin: 0">Couldn't get your location, so this is showing {place.label}. You can pick a city instead.</p>
+      <p class="muted" style="margin: 0.3rem 0 0">Couldn't get your location, so this is showing {place.label}. You can pick a city instead.</p>
     {:else if status === "unsupported"}
-      <p class="muted" style="margin: 0">This browser can't share a location. Please pick a city.</p>
-    {:else if !saved}
-      <p class="muted" style="margin: 0; font-size: 0.9rem">
-        Showing {FALLBACK_PLACE.label}. Sunrise, and so the tithi, depend on where you are. Your location stays on this device.
-      </p>
+      <p class="muted" style="margin: 0.3rem 0 0">This browser can't share a location. Please pick a city.</p>
     {/if}
   </div>
 
-  <dl>
-    {#each limbs as l (l.key)}
-      <div class="limb">
-        <dt>{l.name} · <span class="dev" lang="sa">{l.dev}</span></dt>
-        <dd>
-          <span class="big">{@render sk(l.term)}</span>
-          {#if l.detail}<div class="sub">{l.detail}</div>{/if}
-          {#if l.limb}
-            <div class="sub">
-              until {endText(l.limb.endsAt)}, then {@render sk(l.limb.next)}
-            </div>
-          {/if}
-          <div class="sub" style="opacity: 0.85">{l.name}: {l.what}.</div>
-        </dd>
-      </div>
-    {/each}
-  </dl>
-
-  {#if anyCloseCall}
-    <p class="muted" style="font-size: 0.9rem">
-      ⚠ One of these changes within minutes of sunrise, so other almanacs may name it differently for today.
-    </p>
-  {/if}
-
-  <details class="faq" style="margin-top: 0.6rem">
-    <summary>What is a pañcāṅga?</summary>
+  <details class="faq about" style="margin-top: 0.4rem">
+    <summary>About these terms</summary>
+    <dl class="terms">
+      {#each limbs as l (l.key)}
+        <div class="limb">
+          <dt>{l.name} · <span class="dev" lang="sa">{l.dev}</span></dt>
+          <dd>{l.what}.{#if l.detail} <strong>Today:</strong> {l.detail}.{/if}</dd>
+        </div>
+      {/each}
+    </dl>
     <p>
       <strong>Pañcāṅga</strong> (<span class="dev" lang="sa">पञ्चाङ्ग</span>): <em>pañca</em> means five and <em>aṅga</em>
-      means limb. It is the traditional Indian almanac, built on five elements of the day — weekday (vāra), lunar day
-      (tithi), the Moon's star-group (nakṣatra), yoga and karaṇa.
+      means limb. It is the traditional Indian almanac, built on these five elements of the day.
     </p>
     <p>
       <strong>Significance.</strong> It reckons time by the Sun and the Moon, which is why festival dates move around the
       calendar from year to year.
-    </p>
-    <p>
       <strong>Relevance.</strong> It is still used across India to fix festival and observance dates and family ceremonies.
-    </p>
-    <p>
       <strong>Usage here.</strong> A daily taste of Sanskrit time-words, not for predictions. Weekdays, ordinal numbers and
       star names are everyday vocabulary.
     </p>
     <p class="muted">
-      <strong>Good to know.</strong> Calculated astronomically (Lahiri ayanamsa), with values taken at sunrise at the place
-      above. It can differ by a few minutes from printed almanacs, and traditions and regions differ, so for observance
-      dates please check your local panchang. These names have not yet been reviewed by a Sanskrit scholar.
+      {#if saved}Using {saved.label}.{:else}Showing {FALLBACK_PLACE.label} until you choose a place.{/if} Sunrise, and so the
+      tithi, depend on where you are; your location stays on this device. Calculated astronomically (Lahiri ayanamsa) with
+      values taken at sunrise. It can differ by a few minutes from printed almanacs, and traditions and regions differ, so for
+      observance dates please check your local panchang. These names have not yet been reviewed by a Sanskrit scholar.
     </p>
   </details>
 </details>

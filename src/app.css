@@ -769,29 +769,53 @@ label.radio {
   align-items: center;
   flex-wrap: wrap;
 }
+.panchang .where {
+  margin: 0.2rem 0 0.4rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
 .panchang dl {
-  display: grid;
-  gap: 0.7rem;
-  margin: 0.8rem 0 0;
+  margin: 0;
 }
 .panchang .limb {
+  display: grid;
+  grid-template-columns: 5.4rem 1fr;
+  gap: 0 0.6rem;
+  align-items: baseline;
   border-top: 1px solid var(--border);
-  padding-top: 0.55rem;
+  padding: 0.4rem 0;
 }
 .panchang dt {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--muted);
 }
 .panchang dd {
-  margin: 0.1rem 0 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.6rem;
 }
 .panchang .big {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
 }
-.panchang .sub {
-  font-size: 0.9rem;
+.panchang .hint,
+.panchang .until {
+  font-size: 0.85rem;
   color: var(--muted);
+}
+.panchang .controls {
+  margin: 0.5rem 0 0;
+}
+.panchang .about dl.terms .limb {
+  border-top: none;
+  padding: 0.15rem 0;
+  grid-template-columns: 6.5rem 1fr;
+}
+.panchang .about dl.terms dd {
+  display: block;
+  font-size: 0.9rem;
 }

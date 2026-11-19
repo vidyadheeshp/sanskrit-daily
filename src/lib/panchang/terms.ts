@@ -9,19 +9,21 @@ export interface Term {
   iast: string;
   /** A short English gloss, when one is certain. */
   gloss?: string;
+  /** An even shorter hint for tight spaces (weekdays only). */
+  short?: string;
 }
 
-const t = (dev: string, iast: string, gloss?: string): Term => ({ dev, iast, gloss });
+const t = (dev: string, iast: string, gloss?: string, short?: string): Term => ({ dev, iast, gloss, short });
 
 /** Index 0 = Sunday (JavaScript's getUTCDay order). */
 export const VARAS: readonly Term[] = [
-  t("रविवासरः", "ravivāsaraḥ", "day of the Sun (ravi)"),
-  t("सोमवासरः", "somavāsaraḥ", "day of the Moon (soma)"),
-  t("मङ्गलवासरः", "maṅgalavāsaraḥ", "day of Mars (maṅgala)"),
-  t("बुधवासरः", "budhavāsaraḥ", "day of Mercury (budha)"),
-  t("गुरुवासरः", "guruvāsaraḥ", "day of Jupiter, the teacher (guru)"),
-  t("शुक्रवासरः", "śukravāsaraḥ", "day of Venus (śukra)"),
-  t("शनिवासरः", "śanivāsaraḥ", "day of Saturn (śani)"),
+  t("रविवासरः", "ravivāsaraḥ", "day of the Sun (ravi)", "Sun's day"),
+  t("सोमवासरः", "somavāsaraḥ", "day of the Moon (soma)", "Moon's day"),
+  t("मङ्गलवासरः", "maṅgalavāsaraḥ", "day of Mars (maṅgala)", "Mars's day"),
+  t("बुधवासरः", "budhavāsaraḥ", "day of Mercury (budha)", "Mercury's day"),
+  t("गुरुवासरः", "guruvāsaraḥ", "day of Jupiter, the teacher (guru)", "Jupiter's day"),
+  t("शुक्रवासरः", "śukravāsaraḥ", "day of Venus (śukra)", "Venus's day"),
+  t("शनिवासरः", "śanivāsaraḥ", "day of Saturn (śani)", "Saturn's day"),
 ];
 
 /** Tithi names 1–14 are shared by both pakṣas; the 15th is pūrṇimā (waxing) or amāvāsyā (waning). */

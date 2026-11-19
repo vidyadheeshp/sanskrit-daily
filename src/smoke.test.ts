@@ -529,10 +529,62 @@ describe("panchang card (language-first)", () => {
     expect(cardText()).toMatch(/sunset 5:2\d pm/);
     expect(cardText()).toContain("until"); // each limb says when it ends
     // the brief note: what it is, significance, relevance, usage
-    for (const part of ["What is a pañcāṅga?", "Significance.", "Relevance.", "Usage here.", "not yet been reviewed by a Sanskrit scholar"]) {
+    for (const part of ["About these terms", "Pañcāṅga", "Significance.", "Relevance.", "Usage here.", "not yet been reviewed by a Sanskrit scholar"]) {
       expect(cardText(), part).toContain(part);
     }
     unmount(app);
+  });
+
+  it("is compact: one row per term with a short hint, and the definitions folded away", async () => {
+    setInstant(NOW);
+    const app = mountApp();
+    await goto("#/");
+    const about = card().querySelector<HTMLDetailsElement>("details.about")!;
+    expect(about).not.toBeNull();
+    expect(about.open).toBe(false); // definitions and the note are one tap away, not in the way
+
+    // what is visible by default: everything except the folded-away part and the city dropdown's options
+    const clone = card().cloneNode(true) as HTMLElement;
+    clone.querySelectorAll("details.about, option").forEach((e) => e.remove());
+    const visible = (clone.textContent ?? "").replace(/\s+/g, " ").trim();
+    expect(visible.length).toBeLessThan(500); // it was ~975 before the compact redesign
+
+    const list = Array.from(card().children).find((c) => c.tagName === "DL")!;
+    expect(list.querySelectorAll(":scope > .limb")).toHaveLength(5); // one row per term
+
+    // short but descriptive: the hints that teach something, and when each one ends
+    expect(visible).toContain("Jupiter's day");
+    expect(visible).toContain("ninth · bright fortnight");
+    expect(visible).toContain("until 7:06 am");
+    // the definitions are in the folded part only
+    expect(about.textContent).toContain("the lunar day");
+    expect(visible).not.toContain("the lunar day");
+    unmount(app);
+  });
+
+  it("puts a space before the bracket after the place name", async () => {
+    setInstant(NOW);
+    const app = mountApp();
+    await goto("#/");
+    expect(cardText()).toContain("New Delhi (default)");
+    unmount(app);
+  });
+
+  it("describes full moon, new moon and the dark fortnight in the tithi hint", async () => {
+    for (const [at, expected] of [
+      ["2026-11-24T12:00:00+05:30", "full moon"],
+      ["2026-12-08T12:00:00+05:30", "new moon"], // amāvāsyā at sunrise on 8 Dec; 9 and 10 Dec are both pratipadā
+      ["2026-12-02T12:00:00+05:30", "dark fortnight"],
+    ] as const) {
+      document.body.innerHTML = '<div id="root"></div>';
+      setInstant(at);
+      const app = mountApp();
+      await goto("#/");
+      const clone = card().cloneNode(true) as HTMLElement;
+      clone.querySelectorAll("details.about, option").forEach((e) => e.remove());
+      expect(clone.textContent ?? "", at).toContain(expected);
+      unmount(app);
+    }
   });
 
   it("stays language-first: no auspicious timings, astrology or predictions", async () => {
@@ -586,6 +638,7 @@ describe("panchang card (language-first)", () => {
     await click("Use my location");
     expect(cardText()).toContain("Your location");
     expect(cardText()).toContain("12.97°N 77.59°E"); // ~1 km precision, never the exact point
+    expect(cardText()).toContain("Your location (12.97°N"); // with a space before the bracket
     // Bengaluru's sunrise (not Delhi's), shown in the DEVICE's time zone, whatever that is: a shared location has no
     // fixed zone of its own. The expected text is built the same way the card builds it.
     const bengaluru = panchangFor(new Date(NOW), { lat: 12.97, lon: 77.59, label: "Your location" });
