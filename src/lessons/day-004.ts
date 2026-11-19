@@ -9,8 +9,8 @@ export const lesson: Lesson = {
   rhythm: "new",
   minutes: 6,
   prerequisites: [3],
-  credits: ["Draft written with Claude — awaiting contributor and scholar review"],
-  reviewed: false,
+  credits: ["Draft written with Claude; reviewed by the project owner"],
+  reviewed: true,
   sources: [
     "Verbs from the “Simple Sanskrit sentences” page of Samskrita Bharati's “Mama Bhāṣā Saṃskṛtam” leaflet (Jana Ganana 2026); the “stretch” pattern is a simplification to be checked by a reviewer",
   ],
