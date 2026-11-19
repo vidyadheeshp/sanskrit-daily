@@ -11,6 +11,7 @@ import { toPlain } from "./lib/markup";
 import type { Lesson } from "./lib/schema";
 import { app as store } from "./lib/store.svelte";
 import { PLACE_KEY, loadPlace, savePlace } from "./lib/place";
+import { panchangFor } from "./lib/panchang/panchang";
 
 /** End-to-end smoke tests: play lessons through the real UI in jsdom. */
 
@@ -585,7 +586,13 @@ describe("panchang card (language-first)", () => {
     await click("Use my location");
     expect(cardText()).toContain("Your location");
     expect(cardText()).toContain("12.97°N 77.59°E"); // ~1 km precision, never the exact point
-    expect(cardText()).toMatch(/sunrise 6:(19|2\d) am/); // Bengaluru's sunrise, not Delhi's
+    // Bengaluru's sunrise (not Delhi's), shown in the DEVICE's time zone, whatever that is: a shared location has no
+    // fixed zone of its own. The expected text is built the same way the card builds it.
+    const bengaluru = panchangFor(new Date(NOW), { lat: 12.97, lon: 77.59, label: "Your location" });
+    const sunriseHere = new Intl.DateTimeFormat("en-IN", { hour: "numeric", minute: "2-digit", hour12: true })
+      .format(bengaluru.sunrise!)
+      .replace(/\s+/g, " ");
+    expect(cardText()).toContain(`sunrise ${sunriseHere}`);
     expect(loadPlace()).toEqual({ mode: "device", lat: 12.97, lon: 77.59, label: "Your location" });
     expect(localStorage.getItem(PLACE_KEY)).not.toBeNull();
     expect(JSON.stringify(saved())).not.toContain("12.97"); // not in the progress data that can be exported

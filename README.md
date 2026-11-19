@@ -47,6 +47,7 @@ npm install
 npm run dev          # http://localhost:5173
 npm test             # unit tests, lesson validation, and full UI play-throughs of Lessons 1, 2 and the draft lesson
 npm run check        # type-check (svelte-check)
+npm run test:tz      # run every test as if the device were in six different time zones
 npm run dev:unlock   # preview every lesson, including locked ones
 npm run post -- 3    # ready-to-paste LinkedIn + WhatsApp text for lesson 3
 npm run build        # static site in dist/ (+ per-lesson share pages)

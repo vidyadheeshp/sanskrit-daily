@@ -207,8 +207,13 @@ subsetted Noto Sans Devanagari is a planned improvement (see ROADMAP in CURRICUL
    explanations, tiles, matching, and that progress, notes and review items are saved. Tests that depend on
    the date pin the clock (only `Date` is faked) so they never break as real time passes.
    When you add a lesson, extend this test only if it introduces a new interaction.
-4. **Build check:** `svelte-check` (types) and `vite build` in CI.
-5. **Later:** a Playwright test in a real browser at phone width (jsdom cannot judge layout,
+4. **Time zones (`npm run test:tz`):** runs the whole suite as if the device were in Asia/Kolkata, UTC, Los Angeles,
+   Kiritimati (UTC+14), Pago Pago (UTC-11) and Sydney. Each run first proves the zone was really applied
+   (`src/timezone.test.ts`). Beware: on Windows, writing `TZ=America/Los_Angeles` before a command is silently ignored for
+   IANA names, so a hand-made "zone matrix" can pass without changing anything; use this script. GitHub's build machine
+   runs in UTC, so every deploy also exercises that zone.
+5. **Build check:** `svelte-check` (types) and `vite build` in CI.
+6. **Later:** a Playwright test in a real browser at phone width (jsdom cannot judge layout,
    touch behaviour or Devanagari font rendering — those still need a manual check).
 
 ## 6. Security and privacy
