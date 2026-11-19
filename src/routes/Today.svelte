@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SCHEDULE, MAX_REVIEW_PER_SESSION } from "../config";
+  import { SCHEDULE, MAX_REVIEW_PER_SESSION, UNLOCK_TIME_LABEL } from "../config";
   import { dayNumber, formatISO, localISO } from "../lib/date";
   import { openThrough, scheduleToday, unlockText } from "../lib/access";
   import { dueItems } from "../lib/srs";
@@ -27,7 +27,7 @@
   <div class="callout" role="note" style="margin-bottom: 1rem">
     <strong>Preview.</strong>
     {#if launch}
-      Daily lessons start on <strong>{formatISO(launch)}</strong> at 12:00 AM IST.
+      Daily lessons start on <strong>{formatISO(launch)}</strong> at {UNLOCK_TIME_LABEL}.
     {:else}
       Daily lessons start soon — the date will be announced.
     {/if}

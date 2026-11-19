@@ -38,8 +38,7 @@ export const IST_OFFSET_MINUTES = 330;
 
 /**
  * The calendar date (YYYY-MM-DD) in India Standard Time at instant `now`.
- * Lessons unlock at 12:00 AM IST for everyone, wherever they are, so the release schedule uses this
- * date, not the learner's local date. Independent of the device's time-zone setting.
+ * Independent of the device's time-zone setting. The release schedule builds on this: see `scheduleISO`.
  */
 export function istISO(now: Date = new Date()): string {
   return new Date(now.getTime() + IST_OFFSET_MINUTES * 60_000).toISOString().slice(0, 10);
@@ -54,6 +53,15 @@ export function formatISO(iso: string): string {
     month: "short",
     year: "numeric",
   });
+}
+
+/**
+ * The release schedule's calendar date at instant `now`: the IST date, but with each day starting at
+ * `unlockHourIST` (6 = 6:00 AM IST) instead of midnight. Everyone, everywhere, flips to the next day at the same
+ * instant, whatever their device's time zone.
+ */
+export function scheduleISO(now: Date, unlockHourIST: number): string {
+  return istISO(new Date(now.getTime() - unlockHourIST * 3_600_000));
 }
 
 /** "Fri 20 Nov" — compact, for small tiles. */

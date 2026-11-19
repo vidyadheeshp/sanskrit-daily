@@ -3,13 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  # Daily rollout at 12:00 AM IST (= 18:30 UTC the previous day; IST is UTC+5:30), so each day's
+  # Daily rollout at 6:00 AM IST (= 00:30 UTC; IST is UTC+5:30), so each day's
   # lesson is published without anyone lifting a finger. GitHub cron is always in UTC.
   # The build already ships lessons a couple of days ahead and the app itself unlocks each one at
-  # 12:00 AM IST for everyone, so a delayed or skipped run (GitHub can lag by several minutes)
+  # 6:00 AM IST for everyone, so a delayed or skipped run (GitHub can lag by several minutes)
   # never makes a lesson late.
   schedule:
-    - cron: "30 18 * * *"
+    - cron: "30 0 * * *"
   workflow_dispatch: # "Run workflow" button, for emergencies
 
 permissions:

@@ -7,7 +7,7 @@ Two layers enforce this:
 
 1. **The build** (runs automatically every day) ships only lessons up to *today + 2 days*. Anything
    later is replaced by an empty stub, so unreleased lessons are **not in the website's code at all**.
-2. **The app** unlocks lesson N at **12:00 AM IST for everyone**: a learner in India and one in
+2. **The app** unlocks lesson N at **6:00 AM IST for everyone**: a learner in India and one in
    California get it at exactly the same moment (the schedule runs on the IST date, not the device's local date). A locked lesson shows
    "🔒 Unlocks on Fri, 4 Dec 2026" and nothing else — not even its title.
 
@@ -30,6 +30,7 @@ lesson for offline use.
 | `launchDate` | Day 1, as `"YYYY-MM-DD"`. `null` = not announced: only the preview lesson is open. |
 | `previewLessons` | How many lessons are *always* open — the free sample people can try from your post. |
 | `publishAheadDays` | How many days ahead of "today" a build includes. Keep at 2 (or more). |
+| `unlockHourIST` | The hour (IST, 24h) each day's lesson unlocks: `6` = 6:00 AM IST. If you change it, also change the workflow's cron to the same moment in UTC (IST = UTC+5:30); a test checks they agree. |
 | `siteUrl` | Optional fallback for the public URL (CI sets it automatically). |
 
 ### Setting the launch date
@@ -45,8 +46,8 @@ are not in the published code.
 
 ## Daily routine — automatic
 
-Nothing to do. `.github/workflows/deploy.yml` runs at **12:00 AM IST (18:30 UTC)** every day, rebuilds, and deploys. (GitHub schedules are in UTC; IST is UTC+5:30.)
-It can start a few minutes late — harmless, because tomorrow's lesson is already in the site and the app unlocks it at each learner's own midnight.
+Nothing to do. `.github/workflows/deploy.yml` runs at **6:00 AM IST (00:30 UTC)** every day, rebuilds, and deploys. (GitHub schedules are in UTC; IST is UTC+5:30.)
+It can start a few minutes late — harmless, because tomorrow's lesson is already in the site and the app unlocks it at 6:00 AM IST.
 It also runs on every push to `main`, and has a **Run workflow** button (Actions tab → *Deploy to
 GitHub Pages* → *Run workflow*).
 

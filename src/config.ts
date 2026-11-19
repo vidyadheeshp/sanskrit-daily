@@ -11,6 +11,11 @@ export const SCHEDULE: ScheduleConfig = {
   publishAheadDays: schedule.publishAheadDays,
 };
 
+/** The hour (IST, 24h) at which each day's lesson unlocks. From schedule.json: 6 = 6:00 AM IST. */
+export const UNLOCK_HOUR_IST: number = schedule.unlockHourIST;
+/** "6:00 AM IST" — for display. */
+export const UNLOCK_TIME_LABEL = `${UNLOCK_HOUR_IST % 12 || 12}:00 ${UNLOCK_HOUR_IST < 12 ? "AM" : "PM"} IST`;
+
 /** `npm run dev:unlock` opens every lesson so authors can preview unreleased ones. */
 export const UNLOCK_ALL = import.meta.env.VITE_UNLOCK_ALL === "true";
 

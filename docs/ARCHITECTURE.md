@@ -50,8 +50,8 @@ visit the service worker serves everything from cache.
 
 ### 3.1 The date selects the lesson — and gates it
 `dayNumber = whole calendar days since the launch date, + 1`, computed on the **IST** calendar date
-(India Standard Time, UTC+5:30, no daylight saving) so that a new lesson unlocks at **12:00 AM IST for every
-learner at the same instant**, wherever they are. `istISO()` in `src/lib/date.ts` derives that date from the
+(India Standard Time, UTC+5:30, no daylight saving) so that a new lesson unlocks at **6:00 AM IST for every
+learner at the same instant**, wherever they are. `scheduleISO()` in `src/lib/date.ts` derives that date (the IST date, shifted so each day starts at `unlockHourIST`) from the
 current instant, so it does not depend on the device's time-zone setting. Date arithmetic goes through
 `Date.UTC`, never timestamp differences, so daylight saving elsewhere cannot shift the day by one.
 Personal data (days practised, review due dates) still uses the learner's own local date.

@@ -4,7 +4,7 @@
  *  - `launchDate` is Day 1 (an IST calendar date, YYYY-MM-DD). `null` means "not announced yet".
  *  - `previewLessons` lessons are always open (the free sample), launched or not.
  *  - `publishAheadDays`: a build includes lessons up to this many days ahead of its own date, so
- *    the app can unlock each one at 12:00 AM IST for everyone.
+ *    the app can unlock each one at the unlock time (see unlockHourIST in schedule.json) for everyone.
  */
 import { addDays, dayNumber } from "./date.ts";
 

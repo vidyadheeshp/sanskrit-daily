@@ -244,35 +244,35 @@ describe("date gating", () => {
     unmount(app);
   });
 
-  it("unlocks at exactly 12:00 AM IST: locked one second before, open one second after", async () => {
-    SCHEDULE.launchDate = LAUNCH; // 2026-12-01 (IST); lesson 2 unlocks 2026-12-02 00:00 IST = 2026-12-01 18:30 UTC
+  it("unlocks at exactly 6:00 AM IST: locked one second before, open one second after", async () => {
+    SCHEDULE.launchDate = LAUNCH; // 2026-12-01 (IST); lesson 2 unlocks 2026-12-02 06:00 IST = 2026-12-02 00:30 UTC
 
-    setInstant("2026-12-02T00:00:00+05:30");
+    setInstant("2026-12-02T06:00:00+05:30");
     document.body.innerHTML = '<div id="root"></div>';
     let app = mountApp();
     await goto("#/day/2");
     expect(q("h1")?.textContent).toContain("What is your name?");
     unmount(app);
 
-    setInstant("2026-12-01T23:59:59+05:30");
+    setInstant("2026-12-02T05:59:59+05:30");
     document.body.innerHTML = '<div id="root"></div>';
     app = mountApp();
     await goto("#/day/2");
     expect(page()).toContain("🔒 Lesson 2");
-    expect(page()).toContain("12:00 AM IST");
+    expect(page()).toContain("6:00 AM IST");
     expect(page()).not.toContain("What is your name?");
     unmount(app);
   });
 
-  it("gives a learner in another time zone the same unlock moment (UTC instants either side of 18:30)", async () => {
+  it("gives a learner in another time zone the same unlock moment (UTC instants either side of 00:30)", async () => {
     SCHEDULE.launchDate = LAUNCH;
-    setInstant("2026-12-01T18:29:59Z"); // 23:59:59 IST, but already "tomorrow" in e.g. Australia and Japan
+    setInstant("2026-12-02T00:29:59Z"); // 05:59:59 IST — already mid-morning in Australia and Japan, still the night before in the US
     let app = mountApp();
     await goto("#/day/2");
     expect(page()).toContain("🔒 Lesson 2");
     unmount(app);
 
-    setInstant("2026-12-01T18:30:00Z"); // 00:00:00 IST on the 2nd
+    setInstant("2026-12-02T00:30:00Z"); // 06:00:00 IST
     document.body.innerHTML = '<div id="root"></div>';
     app = mountApp();
     await goto("#/day/2");
@@ -482,7 +482,7 @@ describe("landing page (first visit only)", () => {
     setToday(addDays(LAUNCH, -3));
     const app = mountApp();
     await goto("#/welcome");
-    expect(page()).toContain(`Daily lessons start ${formatISO(LAUNCH)} at 12:00 AM IST`);
+    expect(page()).toContain(`Daily lessons start ${formatISO(LAUNCH)} at 6:00 AM IST`);
     const days = Array.from(document.querySelectorAll(".week li"));
     expect(days).toHaveLength(7);
     expect(days[0].classList.contains("open")).toBe(true); // lesson 1 is the free preview

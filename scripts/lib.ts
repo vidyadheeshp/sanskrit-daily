@@ -8,6 +8,7 @@ import type { ScheduleConfig } from "../src/lib/schedule";
 export const root = new URL("..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
 
 export interface Schedule extends ScheduleConfig {
+  unlockHourIST: number;
   siteUrl: string | null;
 }
 

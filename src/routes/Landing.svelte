@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { REPO_URL, SCHEDULE, SITE_NAME, SITE_NAME_DEV, SITE_SUBTITLE } from "../config";
+  import { REPO_URL, SCHEDULE, SITE_NAME, SITE_NAME_DEV, SITE_SUBTITLE, UNLOCK_TIME_LABEL } from "../config";
   import { dayNumber, formatISO, formatISOShort } from "../lib/date";
   import { openThrough, scheduleToday } from "../lib/access";
   import { unlockDate } from "../lib/schedule";
@@ -35,18 +35,18 @@
       {#if !live && !launch}
         Daily lessons start soon — date to be announced
       {:else if !live && launch}
-        Daily lessons start {formatISO(launch)} at 12:00 AM IST
+        Daily lessons start {formatISO(launch)} at {UNLOCK_TIME_LABEL}
       {:else if dayN <= lessonCount}
         Lesson {dayN} is open today
       {:else}
-        New lessons every day at 12:00 AM IST
+        New lessons every day at {UNLOCK_TIME_LABEL}
       {/if}
     </span>
   </p>
 
   <h1 id="hero-h">Learn Sanskrit, one small step a day.</h1>
   <p class="lede">
-    A new five-minute lesson every day at 12 AM IST. Free, no login, no ads — it works right in your browser.
+    A new five-minute lesson every day at {UNLOCK_TIME_LABEL}. Free, no login, no ads — it works right in your browser.
   </p>
   <div class="cta-row">
     <a class="btn btn-primary btn-lg" href="#/day/1">Start with lesson 1</a>
@@ -92,7 +92,7 @@
   <h2 id="week-h">Your first week</h2>
   <p>
     Everyday conversation: hello, your name, and what people are doing. One lesson unlocks each day at
-    <strong>12:00 AM IST</strong> — for everyone, wherever you are.
+    <strong>{UNLOCK_TIME_LABEL}</strong> — for everyone, wherever you are.
   </p>
   <ol class="week" aria-label="First seven lessons">
     {#each week as d (d.n)}

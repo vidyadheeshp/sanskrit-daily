@@ -1,18 +1,24 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
-import { addDays } from "./lib/date";
+import { addDays, scheduleISO } from "./lib/date";
 import { publishThrough, unlockedThrough, type ScheduleConfig } from "./lib/schedule";
 
 const workflow = readFileSync(new URL("../.github/workflows/deploy.yml", import.meta.url), "utf8");
+const settings = JSON.parse(readFileSync(new URL("../schedule.json", import.meta.url), "utf8").replace(/^﻿/, ""));
+const UNLOCK_HOUR_IST: number = settings.unlockHourIST;
 const cfg: ScheduleConfig = { launchDate: "2026-11-19", previewLessons: 1, publishAheadDays: 2 };
+const HOUR = 3_600_000;
 
 describe("daily rollout workflow", () => {
-  it("runs at 12:00 AM IST (18:30 UTC; IST is UTC+5:30)", () => {
+  it("is set to unlock at 6:00 AM IST", () => {
+    expect(UNLOCK_HOUR_IST).toBe(6);
+  });
+
+  it("runs at the unlock moment: 6:00 AM IST = 00:30 UTC (IST is UTC+5:30)", () => {
     const cron = /cron:\s*"([^"]+)"/.exec(workflow)?.[1];
-    expect(cron).toBe("30 18 * * *");
+    expect(cron).toBe("30 0 * * *");
     const [min, hour] = cron!.split(" ").map(Number);
-    const istMinutes = (hour * 60 + min + 5 * 60 + 30) % (24 * 60);
-    expect(istMinutes).toBe(0); // 00:00 IST
+    expect((hour * 60 + min + 5 * 60 + 30) % (24 * 60)).toBe(UNLOCK_HOUR_IST * 60); // the cron and the setting agree
   });
 
   it("is also triggerable by hand and on every push", () => {
@@ -26,26 +32,29 @@ describe("daily rollout workflow", () => {
   });
 });
 
-describe("the 18:30 UTC build is always ahead of the next IST midnight", () => {
-  it("has already published the lesson that unlocks at the next 00:00 IST, for every day of a long run", () => {
-    // The build runs on UTC date D at 18:30. The next IST midnight starts IST date D + 1 for every learner (the schedule runs on IST).
-    for (let i = -10; i < 400; i++) {
-      const utcDate = addDays("2026-11-19", i);
-      const istDateAtNextMidnight = addDays(utcDate, 1);
-      expect(publishThrough(utcDate, cfg), `build on ${utcDate}`).toBeGreaterThanOrEqual(
-        unlockedThrough(istDateAtNextMidnight, cfg),
-      );
+describe("a build is always ahead of the lesson learners can open", () => {
+  // A build made at instant b is the live site until the next build. Even if one scheduled run is skipped,
+  // that is under 48 hours. Every learner's schedule day in that window must already be published.
+  it("holds for builds at any hour of any day, with learners checking for up to 48 hours afterwards", () => {
+    for (let day = -10; day < 400; day++) {
+      for (const buildHour of [0, 0.5, 6, 12, 18, 23.5]) {
+        const build = new Date(Date.parse(`${addDays("2026-11-19", day)}T00:00:00Z`) + buildHour * HOUR);
+        const published = publishThrough(build.toISOString().slice(0, 10), cfg);
+        for (let ahead = 0; ahead <= 48; ahead += 2) {
+          const learnerDay = scheduleISO(new Date(build.getTime() + ahead * HOUR), UNLOCK_HOUR_IST);
+          expect(published, `built ${build.toISOString()}, learner +${ahead}h`).toBeGreaterThanOrEqual(
+            unlockedThrough(learnerDay, cfg),
+          );
+        }
+      }
     }
   });
 
-  it("still covers a run that GitHub starts up to ~a day late", () => {
-    // A skipped run means the next build happens ~24h later; the site must not be a lesson short in between.
-    for (let i = -10; i < 400; i++) {
-      const utcDate = addDays("2026-11-19", i);
-      const twoLocalMidnightsLater = addDays(utcDate, 2);
-      expect(publishThrough(utcDate, cfg), `build on ${utcDate}`).toBeGreaterThanOrEqual(
-        unlockedThrough(twoLocalMidnightsLater, cfg),
-      );
+  it("at the cron moment itself, the lesson unlocking right now is already in the site", () => {
+    for (let day = -10; day < 400; day++) {
+      const cronRun = new Date(`${addDays("2026-11-19", day)}T00:30:00Z`);
+      const now = unlockedThrough(scheduleISO(cronRun, UNLOCK_HOUR_IST), cfg);
+      expect(publishThrough(cronRun.toISOString().slice(0, 10), cfg), cronRun.toISOString()).toBeGreaterThanOrEqual(now);
     }
   });
 });

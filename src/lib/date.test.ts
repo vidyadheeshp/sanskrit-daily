@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { addDays, dayNumber, daysBetween, formatISOShort, isValidISO, istISO, localISO } from "./date";
+import { addDays, dayNumber, daysBetween, formatISOShort, isValidISO, istISO, localISO, scheduleISO } from "./date";
 
 describe("date maths", () => {
   it("launch day is day 1", () => {
@@ -84,5 +84,36 @@ describe("formatISOShort", () => {
     expect(s).toContain("Nov");
     expect(s).toContain("Fri");
     expect(s).not.toContain("2026");
+  });
+});
+
+describe("scheduleISO (the day starts at the unlock hour, in IST)", () => {
+  it("flips at exactly 6:00 AM IST = 00:30 UTC", () => {
+    expect(scheduleISO(new Date("2026-11-19T05:59:59+05:30"), 6)).toBe("2026-11-18");
+    expect(scheduleISO(new Date("2026-11-19T06:00:00+05:30"), 6)).toBe("2026-11-19");
+    expect(scheduleISO(new Date("2026-11-19T00:29:59Z"), 6)).toBe("2026-11-18");
+    expect(scheduleISO(new Date("2026-11-19T00:30:00Z"), 6)).toBe("2026-11-19");
+  });
+
+  it("is the same instant for every learner, wherever they are", () => {
+    const flip = "2026-11-19T00:30:00Z";
+    for (const zoneForm of [flip, "2026-11-18T16:30:00-08:00", "2026-11-19T14:30:00+14:00"]) {
+      expect(scheduleISO(new Date(zoneForm), 6), zoneForm).toBe("2026-11-19");
+    }
+  });
+
+  it("with hour 0 it is exactly the IST calendar date", () => {
+    const t = new Date("2026-11-18T18:30:00Z");
+    expect(scheduleISO(t, 0)).toBe(istISO(t));
+  });
+
+  it("is never ahead of the UTC date (the build's publish-ahead window relies on this)", () => {
+    const start = Date.parse("2026-11-18T00:00:00Z");
+    for (let m = 0; m < 3 * 24 * 60; m += 15) {
+      const t = new Date(start + m * 60_000);
+      const lead = daysBetween(t.toISOString().slice(0, 10), scheduleISO(t, 6));
+      expect(lead, t.toISOString()).toBeLessThanOrEqual(0);
+      expect(lead, t.toISOString()).toBeGreaterThanOrEqual(-1);
+    }
   });
 });

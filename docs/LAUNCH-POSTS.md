@@ -1,6 +1,6 @@
 # Launch posts
 
-The launch date (**Thursday 19 November 2026**), the new-lesson time (**12 AM IST**) and the link are all filled in.
+The launch date (**Thursday 19 November 2026**), the new-lesson time (**6 AM IST**) and the link are all filled in.
 `https://vidyadheeshp.github.io/sanskrit-daily/d/1/` is the lesson 1 share page: it shows a proper preview card and
 opens lesson 1. Check the preview in LinkedIn's Post Inspector before posting.
 
@@ -19,7 +19,7 @@ It isn't a flashcard app. Each 5-minute lesson explains the *why* first. For exa
 ✅ Free and open source
 ✅ No login, no ads, works on your phone
 ✅ Starts with everyday phrases: hello, "what is your name?", "what are you doing?"
-✅ A new lesson every day at 12 AM IST, starting Thursday 19 November
+✅ A new lesson every day at 6 AM IST, starting Thursday 19 November
 
 Lesson 1 is open to try right now 👇
 https://vidyadheeshp.github.io/sanskrit-daily/d/1/
@@ -34,7 +34,7 @@ And if you know someone who has always wanted to start Sanskrit, tag them! 🙏
 
 ## WhatsApp — launch message
 
-🪔 *Dine Dine* (दिने दिने, "Sanskrit Daily") — a new 5-minute Sanskrit lesson every day at 12 AM IST (starting Thursday 19 November).
+🪔 *Dine Dine* (दिने दिने, "Sanskrit Daily") — a new 5-minute Sanskrit lesson every day at 6 AM IST (starting Thursday 19 November).
 
 Free, no login, no ads. It starts with everyday phrases — hello, "what's your name?", "what are you doing?" — and explains the *why* behind every word.
 
