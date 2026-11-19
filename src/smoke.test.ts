@@ -181,12 +181,12 @@ describe("share button", () => {
 });
 
 describe("Lesson 1 details", () => {
-  it("is open as a preview even before a launch date exists, and shows the not-reviewed badge", async () => {
+  it("is open as a preview even before a launch date exists, and carries no not-reviewed badge once reviewed", async () => {
     SCHEDULE.launchDate = null;
     const app = mountApp();
     await goto("#/day/1");
     expect(q("h1")?.textContent).toContain("Say hello");
-    expect(page()).toContain("Not yet scholar-reviewed");
+    expect(page()).not.toContain("Not yet scholar-reviewed");
 
     await click("Continue"); // hook
     expect(cont().disabled).toBe(true); // reveal-cards demo is gated until all six words are opened
