@@ -9,8 +9,8 @@ export const lesson: Lesson = {
   rhythm: "review",
   minutes: 7,
   prerequisites: [6],
-  credits: ["Draft written with Claude — awaiting contributor and scholar review"],
-  reviewed: false,
+  credits: ["Draft written with Claude; reviewed by the project owner"],
+  reviewed: true,
   sources: [
     "Phrases from the “Simple Sanskrit sentences” page of Samskrita Bharati's “Mama Bhāṣā Saṃskṛtam” leaflet (Jana Ganana 2026); to be verified by a reviewer",
   ],
