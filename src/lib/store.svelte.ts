@@ -31,6 +31,17 @@ class AppStore {
     return String(n) in this.state.completed;
   }
 
+  isWeekDone(n: number): boolean {
+    return String(n) in this.state.weeks;
+  }
+
+  /** Record that the weekly check was finished. The first date is kept; taking it again changes nothing. */
+  completeWeek(n: number) {
+    const key = String(n);
+    if (!(key in this.state.weeks)) this.state.weeks[key] = localISO();
+    this.commit();
+  }
+
   setScript(script: ScriptSetting) {
     this.state.settings.script = script;
     this.commit();

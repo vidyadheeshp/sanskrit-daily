@@ -10,6 +10,7 @@
   import Home from "./routes/Home.svelte";
   import Landing from "./routes/Landing.svelte";
   import DayPage from "./routes/DayPage.svelte";
+  import WeekPage from "./routes/WeekPage.svelte";
   import Archive from "./routes/Archive.svelte";
   import Notes from "./routes/Notes.svelte";
   import Review from "./routes/Review.svelte";
@@ -44,7 +45,8 @@
     if (allowed) countPage(COUNTER_CODE, location.hash.replace(/^#/, "") || "/", document.title);
   });
 
-  const current = (name: string) => route.name === name || (name === "today" && route.name === "day");
+  const current = (name: string) =>
+    route.name === name || (name === "today" && route.name === "day") || (name === "archive" && route.name === "week");
 </script>
 
 <div class="shell">
@@ -79,6 +81,8 @@
         <Landing />
       {:else if route.name === "day"}
         <DayPage n={route.n} />
+      {:else if route.name === "week"}
+        {#key route.n}<WeekPage n={route.n} />{/key}
       {:else if route.name === "archive"}
         <Archive />
       {:else if route.name === "notes"}

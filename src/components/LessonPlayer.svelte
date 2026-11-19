@@ -6,6 +6,7 @@
   import Msg from "./Msg.svelte";
   import Rich from "./Rich.svelte";
   import ShareButton from "./ShareButton.svelte";
+  import { weekEndingWith } from "../weeks";
   import ExplainStepView from "./ExplainStep.svelte";
   import DemoStepView from "./DemoStep.svelte";
   import ExerciseStepView from "./ExerciseStep.svelte";
@@ -18,6 +19,8 @@
   let finished = $state(false);
   let panel: HTMLElement | undefined = $state();
 
+  /** Set when this is the last lesson of a week: offer that week's check. */
+  const endOfWeek = $derived(weekEndingWith(lesson.number));
   const total = $derived(lesson.steps.length);
   const step = $derived(lesson.steps[index]);
   const isLast = $derived(index === total - 1);
@@ -71,6 +74,12 @@
       <a class="btn" href="#/notes">{t("nav.notes")}</a>
       <a class="btn" href="#/archive">{t("common.archive")}</a>
     </div>
+    {#if endOfWeek}
+      <div class="callout" role="note">
+        <p style="margin: 0 0 0.5rem">{t("week.finish.prompt", { n: endOfWeek.number })}</p>
+        <a class="btn btn-primary" href="#/week/{endOfWeek.number}">{t("week.cta", { n: endOfWeek.number })}</a>
+      </div>
+    {/if}
     <h2 style="margin-top: 0.5rem">{t("done.share")}</h2>
     <ShareButton {lesson} />
   </section>

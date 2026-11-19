@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { defineConfig, type Plugin } from "vitest/config";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { VitePWA } from "vite-plugin-pwa";
-import { publishThrough, type ScheduleConfig } from "./src/lib/schedule.ts";
+import { publishThrough, weekLastLesson, type ScheduleConfig } from "./src/lib/schedule.ts";
 
 // BASE_PATH is "/" locally and "/<repo>/" on GitHub Pages (set by the deploy workflow).
 const raw = process.env.BASE_PATH ?? "/";
@@ -25,7 +25,11 @@ function holdBackUnreleasedLessons(): Plugin {
     apply: "build",
     enforce: "pre",
     load(id) {
-      const m = /[\\/]src[\\/]lessons[\\/]day-(\d+)\.ts$/.exec(id.split("?")[0]);
+      const clean = id.split("?")[0];
+      // A weekly check is held back until its last lesson is published, so it cannot reveal lessons still to come.
+      const w = /[\\/]src[\\/]weeks[\\/]week-(\d+)\.ts$/.exec(clean);
+      if (w) return weekLastLesson(Number(w[1])) > through ? { code: "export const week = null;", map: null } : null;
+      const m = /[\\/]src[\\/]lessons[\\/]day-(\d+)\.ts$/.exec(clean);
       if (!m) return null;
       if (!announced) {
         announced = true;

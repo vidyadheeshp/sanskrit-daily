@@ -12,6 +12,8 @@ export interface State {
   version: 1;
   /** lesson number → local date completed */
   completed: Record<string, string>;
+  /** week number → local date the weekly check was finished */
+  weeks: Record<string, string>;
   /** lesson number → recap rule */
   notes: Record<string, string>;
   /** "<lesson>:<stepId>" → review card */
@@ -26,7 +28,7 @@ export interface KV {
 }
 
 export function defaultState(): State {
-  return { version: 1, completed: {}, notes: {}, review: {}, settings: { script: "both", countVisits: true, welcomeSeen: false, showPanchang: true, language: DEFAULT_LANG } };
+  return { version: 1, completed: {}, weeks: {}, notes: {}, review: {}, settings: { script: "both", countVisits: true, welcomeSeen: false, showPanchang: true, language: DEFAULT_LANG } };
 }
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -41,6 +43,11 @@ export function parseState(raw: unknown): State | null {
   if (isRecord(raw.completed)) {
     for (const [k, v] of Object.entries(raw.completed)) {
       if (/^\d+$/.test(k) && isValidISO(v)) out.completed[k] = v;
+    }
+  }
+  if (isRecord(raw.weeks)) {
+    for (const [k, v] of Object.entries(raw.weeks)) {
+      if (/^\d+$/.test(k) && isValidISO(v)) out.weeks[k] = v;
     }
   }
   if (isRecord(raw.notes)) {

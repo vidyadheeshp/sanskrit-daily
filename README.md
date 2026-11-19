@@ -106,3 +106,7 @@ docs/              all project documentation
 ## Languages
 
 English by default; Kannada (draft, interface only) is opt-in from the header or Settings. See [docs/I18N.md](docs/I18N.md).
+
+## Weekly check
+
+After each week of seven lessons, a short check and a plain thank-you badge. See [docs/WEEKLY-CHECK.md](docs/WEEKLY-CHECK.md).

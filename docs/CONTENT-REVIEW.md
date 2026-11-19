@@ -53,3 +53,7 @@ List sources in the lesson's `sources` field when used.
 ## Kannada interface review
 
 `src/i18n/kn.ts` is an unreviewed draft. A native Kannada speaker should check: natural wording (not word-for-word), consistent terms for lesson/streak/review, placeholders and links intact, the panchang card terms, and the date/time display. When signed off, set `reviewed: true` for `kn` in `src/i18n/langs.ts` (and the test that pins it). See [I18N.md](I18N.md).
+
+## Weekly checks
+
+Each weekly check (`src/weeks/week-NN.ts`) needs the same review as a lesson: correct Sanskrit, one right answer per question, vocabulary only from that week. Then set `reviewed: true`. Also read the one-line teaser for the next week. See [WEEKLY-CHECK.md](WEEKLY-CHECK.md).

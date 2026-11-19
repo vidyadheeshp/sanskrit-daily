@@ -1,6 +1,7 @@
 export type Route =
   | { name: "today" }
   | { name: "day"; n: number }
+  | { name: "week"; n: number }
   | { name: "archive" }
   | { name: "notes" }
   | { name: "review" }
@@ -19,6 +20,10 @@ export function parseHash(hash: string): Route {
     case "day": {
       const n = Number(arg);
       return Number.isInteger(n) && n >= 1 ? { name: "day", n } : { name: "today" };
+    }
+    case "week": {
+      const n = Number(arg);
+      return Number.isInteger(n) && n >= 1 ? { name: "week", n } : { name: "today" };
     }
     case "archive":
     case "notes":

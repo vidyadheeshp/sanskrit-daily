@@ -14,6 +14,11 @@ export interface ScheduleConfig {
   publishAheadDays: number;
 }
 
+/** A "week" is seven lessons: Week 1 = lessons 1–7, Week 2 = lessons 8–14, and so on. */
+export const LESSONS_PER_WEEK = 7;
+export const weekFirstLesson = (week: number): number => (week - 1) * LESSONS_PER_WEEK + 1;
+export const weekLastLesson = (week: number): number => week * LESSONS_PER_WEEK;
+
 /** Highest lesson number a learner may open on the IST date `today`. */
 export function unlockedThrough(today: string, c: ScheduleConfig): number {
   const byDate = c.launchDate ? Math.max(0, dayNumber(today, c.launchDate)) : 0;

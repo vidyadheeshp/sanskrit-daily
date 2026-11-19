@@ -3,10 +3,13 @@
   import { app } from "../lib/store.svelte";
   import { dyn, t } from "../i18n";
   import { allNumbers, lessons } from "../lessons";
+  import { weeks, lessonRange } from "../weeks";
 
   const open = openThrough(scheduleToday());
   const available = lessons.filter((l) => l.number <= open);
   const locked = allNumbers.filter((n) => n > open);
+  /** A week's check appears once its last lesson is open. */
+  const checks = weeks.filter((w) => lessonRange(w.number)[1] <= open);
 </script>
 
 <h1>{t("archive.title")}</h1>
@@ -30,6 +33,25 @@
               </div>
             </div>
             {#if app.isCompleted(l.number)}<span class="chip">{t("common.done")}</span>{/if}
+          </div>
+        </a>
+      </li>
+    {/each}
+  </ul>
+{/if}
+
+{#if checks.length > 0}
+  <h2 style="margin-top: 1.5rem">{t("week.badge.title")}</h2>
+  <ul class="lesson-list">
+    {#each checks as w (w.number)}
+      <li>
+        <a href="#/week/{w.number}">
+          <div class="card row spread">
+            <div>
+              <strong>{t("week.cta.done", { n: w.number })}</strong>
+              <div class="muted" style="font-size: 0.9rem">{t("week.archive.sub", { first: lessonRange(w.number)[0], last: lessonRange(w.number)[1] })}</div>
+            </div>
+            {#if app.isWeekDone(w.number)}<span class="chip">{t("common.done")}</span>{/if}
           </div>
         </a>
       </li>

@@ -116,6 +116,22 @@ export const stepSchema = z.union([
   recapStep,
 ]);
 
+const exerciseSchema = z.union([choiceStep, tilesStep, matchStep]);
+
+/**
+ * A weekly check: a short set of questions on everything in a week, shown after its last lesson.
+ * Questions use the same exercise shapes as lessons. There is no pass mark; finishing earns a thank-you badge.
+ */
+export const weekSchema = z.object({
+  number: z.number().int().min(1),
+  title: text,
+  reviewed: z.boolean(),
+  credits: z.array(text).min(1),
+  questions: z.array(exerciseSchema).min(6),
+  /** One brief line teasing the next week. A teaser only; never lesson content. */
+  next: text,
+});
+
 export const lessonSchema = z.object({
   number: z.number().int().min(1),
   title: text,
@@ -132,6 +148,7 @@ export const lessonSchema = z.object({
 });
 
 export type Lesson = z.infer<typeof lessonSchema>;
+export type Week = z.infer<typeof weekSchema>;
 export type Step = z.infer<typeof stepSchema>;
 export type ExplainStep = z.infer<typeof explainStep>;
 export type DemoStep = z.infer<typeof demoStep>;

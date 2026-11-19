@@ -74,3 +74,7 @@ addresses) under its own privacy policy. The app itself adds nothing to that, ap
 ## Language preference
 
 `settings.language` (`en` or `kn`) is stored in the browser with the other settings and is included in the progress export. It is never sent anywhere.
+
+## Weekly check
+
+`weeks` records, per week, the date the weekly check was first finished. It is stored in the browser with the other progress, included in the progress export, and never sent anywhere. The score is shown on screen only and is not stored. The badge image is made in the browser and contains nothing about the person.

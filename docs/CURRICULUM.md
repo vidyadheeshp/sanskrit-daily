@@ -92,3 +92,5 @@ Days 1–7 are all conversation; after that the two tracks alternate.
 - [ ] Contributor recognition page generated from lesson `credits`
 - [ ] Native wrapper (Capacitor) once the web app is stable
 - [ ] Audio — deliberately deferred; only revisit with a reviewed source of pronunciation
+
+> At the end of every seven lessons there is a weekly check with a thank-you badge. See [WEEKLY-CHECK.md](WEEKLY-CHECK.md).
