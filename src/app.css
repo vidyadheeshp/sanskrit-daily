@@ -760,3 +760,38 @@ label.radio {
 .section {
   margin-top: 1.6rem;
 }
+
+/* ---------- panchang card ---------- */
+.panchang > summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.panchang dl {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0.8rem 0 0;
+}
+.panchang .limb {
+  border-top: 1px solid var(--border);
+  padding-top: 0.55rem;
+}
+.panchang dt {
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.panchang dd {
+  margin: 0.1rem 0 0;
+}
+.panchang .big {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.panchang .sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+}

@@ -60,7 +60,10 @@ describe("visit counter UI (configured)", { timeout: 30_000 }, () => {
     vi.stubGlobal("fetch", fetchMock);
     const { go } = await boot("#/settings");
 
-    const box = document.querySelector<HTMLInputElement>('input[type="checkbox"]')!;
+    // find the checkbox by its label, not by position: Settings has more than one
+    const box = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')).find((b) =>
+      (b.closest("label")?.textContent ?? "").includes("Count my visits"),
+    )!;
     expect(box.checked).toBe(true);
     box.click();
     await flush();

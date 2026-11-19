@@ -150,6 +150,12 @@ The decision is made once, when `Home` opens (a plain `const`, not reactive), so
 flip it away while it is being read. `#/welcome` always shows the landing page and is linked from the navigation
 ("What is this?"). Deep links such as `#/day/3` or a lesson share page bypass it.
 
+### 3.6b The panchang card
+`PanchangCard.svelte` (Today page, switchable in Settings) shows the five limbs of the day, calculated in the browser
+by `src/lib/panchang/` (pure functions, validated against independent data: see [PANCHANG.md](PANCHANG.md)). A learner's
+location is optional, rounded, kept under its own storage key (not in the exportable progress), and never sent anywhere.
+The card is language-first by rule: a test fails if auspicious-timing or astrology vocabulary appears on it.
+
 ### 3.7 Offline / PWA
 `vite-plugin-pwa` generates a Workbox service worker that pre-caches the whole app shell and
 all lessons (lessons are bundled into the JS, so there is nothing separate to fetch). The
@@ -176,6 +182,8 @@ subsetted Noto Sans Devanagari is a planned improvement (see ROADMAP in CURRICUL
 | `src/lib/access.ts` | app-side wrapper: `openThrough`, `unlockText` | — |
 | `src/lib/share.ts` | share URL and message text | yes |
 | `src/lib/counter.ts` | optional anonymous visit counter (GoatCounter) | mostly |
+| `src/lib/panchang/` | astronomy, Sanskrit names and the five limbs for the Today card (see docs/PANCHANG.md) | yes |
+| `src/lib/place.ts` | the optional saved location for the card (own storage key, never exported) | yes |
 | `scripts/` | build-time: share pages, daily post text (run with tsx) | — |
 | `src/lib/schema.ts` | Zod schema + inferred TS types for lessons | yes |
 | `src/lib/markup.ts` | tiny inline markup → safe token array | yes |

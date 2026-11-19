@@ -10,6 +10,7 @@ import { addDays, formatISO } from "./lib/date";
 import { toPlain } from "./lib/markup";
 import type { Lesson } from "./lib/schema";
 import { app as store } from "./lib/store.svelte";
+import { PLACE_KEY, loadPlace, savePlace } from "./lib/place";
 
 /** End-to-end smoke tests: play lessons through the real UI in jsdom. */
 
@@ -500,6 +501,185 @@ describe("landing page (first visit only)", () => {
     const open = document.querySelectorAll(".week li.open");
     expect(open).toHaveLength(3);
     for (const l of lessons.slice(3)) expect(page(), l.title).not.toContain(l.title);
+    unmount(app);
+  });
+});
+
+describe("panchang card (language-first)", () => {
+  const NOW = "2026-11-19T12:00:00+05:30";
+
+  const setGeolocation = (impl: unknown) =>
+    Object.defineProperty(navigator, "geolocation", { value: impl, configurable: true });
+  afterEach(() => setGeolocation(undefined));
+
+  const card = () => document.querySelector(".panchang")!;
+  const cardText = () => (card().textContent ?? "").replace(/\s+/g, " ");
+
+  it("shows the five limbs for New Delhi by default, in Sanskrit, with the brief note", async () => {
+    setInstant(NOW);
+    const app = mountApp();
+    await goto("#/");
+    expect(cardText()).toContain("Today in the Sanskrit calendar");
+    for (const label of ["Vāra", "Tithi", "Nakṣatra", "Yoga", "Karaṇa"]) expect(cardText(), label).toContain(label);
+    // Thursday 19 Nov 2026: Śukla navamī, pūrva bhādrapadā, vyāghāta, kaulava (cross-checked against a published almanac)
+    for (const name of ["गुरुवासरः", "नवमी", "पूर्व भाद्रपदा", "व्याघात", "कौलव"]) expect(cardText(), name).toContain(name);
+    expect(cardText()).toContain("New Delhi");
+    expect(cardText()).toMatch(/sunrise 6:4\d am/);
+    expect(cardText()).toMatch(/sunset 5:2\d pm/);
+    expect(cardText()).toContain("until"); // each limb says when it ends
+    // the brief note: what it is, significance, relevance, usage
+    for (const part of ["What is a pañcāṅga?", "Significance.", "Relevance.", "Usage here.", "not yet been reviewed by a Sanskrit scholar"]) {
+      expect(cardText(), part).toContain(part);
+    }
+    unmount(app);
+  });
+
+  it("stays language-first: no auspicious timings, astrology or predictions", async () => {
+    setInstant(NOW);
+    const app = mountApp();
+    await goto("#/");
+    expect(cardText()).not.toMatch(/rahu|muhurt|muhūrt|abhijit|auspicious|inauspicious|horoscope|astrolog|kundali|lucky|zodiac sign/i);
+    expect(cardText()).toContain("not for predictions");
+    unmount(app);
+  });
+
+  it("explains each term in plain English", async () => {
+    setInstant(NOW);
+    const app = mountApp();
+    await goto("#/");
+    expect(cardText()).toContain("the day of the week");
+    expect(cardText()).toContain("the lunar day");
+    expect(cardText()).toContain("one of 27");
+    expect(cardText()).toContain("half a tithi");
+    expect(cardText()).toContain("day of Jupiter, the teacher (guru)");
+    expect(cardText()).toContain("ninth"); // tithis are ordinal numbers: vocabulary
+    unmount(app);
+  });
+
+  it("is still yesterday's panchang before sunrise, and says so", async () => {
+    setInstant("2026-11-19T04:30:00+05:30");
+    const app = mountApp();
+    await goto("#/");
+    expect(cardText()).toContain("still yesterday's panchang");
+    expect(cardText()).toContain("बुधवासरः"); // Wednesday
+    unmount(app);
+  });
+
+  it("flags a change that falls within minutes of sunrise", async () => {
+    setInstant("2027-08-05T12:00:00+05:30");
+    savePlace({ mode: "city", lat: 22.5726, lon: 88.3639, label: "Kolkata" });
+    const app = mountApp();
+    await goto("#/");
+    expect(cardText()).toContain("within minutes of sunrise");
+    unmount(app);
+  });
+
+  it("uses the device's location when the learner shares it, rounded, and remembers it separately", async () => {
+    setInstant(NOW);
+    setGeolocation({
+      getCurrentPosition: (ok: (p: unknown) => void) => ok({ coords: { latitude: 12.971599, longitude: 77.594566 } }),
+    });
+    const app = mountApp();
+    await goto("#/");
+    expect(cardText()).toContain("Showing New Delhi");
+    await click("Use my location");
+    expect(cardText()).toContain("Your location");
+    expect(cardText()).toContain("12.97°N 77.59°E"); // ~1 km precision, never the exact point
+    expect(cardText()).toMatch(/sunrise 6:(19|2\d) am/); // Bengaluru's sunrise, not Delhi's
+    expect(loadPlace()).toEqual({ mode: "device", lat: 12.97, lon: 77.59, label: "Your location" });
+    expect(localStorage.getItem(PLACE_KEY)).not.toBeNull();
+    expect(JSON.stringify(saved())).not.toContain("12.97"); // not in the progress data that can be exported
+    unmount(app);
+  });
+
+  it("can forget the location again, going back to the default city", async () => {
+    setInstant(NOW);
+    savePlace({ mode: "device", lat: 12.97, lon: 77.59, label: "Your location" });
+    const app = mountApp();
+    await goto("#/");
+    expect(cardText()).toContain("Your location");
+    await click("Forget my location");
+    expect(cardText()).toContain("New Delhi");
+    expect(loadPlace()).toBeNull();
+    unmount(app);
+  });
+
+  it("explains kindly when the location is refused, and keeps showing a city", async () => {
+    setInstant(NOW);
+    setGeolocation({ getCurrentPosition: (_ok: unknown, fail: (e: unknown) => void) => fail({ code: 1 }) });
+    const app = mountApp();
+    await goto("#/");
+    await click("Use my location");
+    expect(cardText()).toContain("Couldn't get your location");
+    expect(cardText()).toContain("New Delhi");
+    expect(loadPlace()).toBeNull(); // nothing is stored when it is refused
+    unmount(app);
+  });
+
+  it("says so when the browser cannot share a location", async () => {
+    setInstant(NOW);
+    setGeolocation(undefined);
+    const app = mountApp();
+    await goto("#/");
+    await click("Use my location");
+    expect(cardText()).toContain("can't share a location");
+    unmount(app);
+  });
+
+  it("lets the learner pick a city instead", async () => {
+    setInstant(NOW);
+    const app = mountApp();
+    await goto("#/");
+    const select = document.querySelector<HTMLSelectElement>("#pc-city")!;
+    select.value = "Bengaluru";
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+    flushSync();
+    await tick();
+    expect(cardText()).toContain("Bengaluru");
+    expect(cardText()).toMatch(/sunrise 6:(19|2\d) am/);
+    expect(loadPlace()).toMatchObject({ mode: "city", label: "Bengaluru" });
+    unmount(app);
+  });
+
+  it("can be switched off in Settings, and back on", async () => {
+    setInstant(NOW);
+    const app = mountApp();
+    await goto("#/settings");
+    const box = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')).find((b) =>
+      (b.closest("label")?.textContent ?? "").includes("panchang"),
+    )!;
+    expect(box.checked).toBe(true);
+    box.click();
+    flushSync();
+    await tick();
+    expect(saved().settings.showPanchang).toBe(false);
+    await goto("#/");
+    expect(document.querySelector(".panchang")).toBeNull();
+    await goto("#/settings");
+    Array.from(document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')).find((b) =>
+      (b.closest("label")?.textContent ?? "").includes("panchang"),
+    )!.click();
+    flushSync();
+    await tick();
+    await goto("#/");
+    expect(document.querySelector(".panchang")).not.toBeNull();
+    unmount(app);
+  });
+
+  it("deletes the saved location when everything is deleted", async () => {
+    savePlace({ mode: "device", lat: 12.97, lon: 77.59, label: "Your location" });
+    expect(loadPlace()).not.toBeNull();
+    store.reset();
+    expect(loadPlace()).toBeNull();
+  });
+
+  it("does not appear on the lesson pages or the landing page", async () => {
+    SCHEDULE.launchDate = EVERYTHING_OPEN;
+    const app = mountApp();
+    await goto("#/day/1");
+    expect(document.querySelector(".panchang")).toBeNull();
+    await goto("#/welcome");
+    expect(document.querySelector(".panchang")).toBeNull();
     unmount(app);
   });
 });

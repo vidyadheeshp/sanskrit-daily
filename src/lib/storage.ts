@@ -15,7 +15,7 @@ export interface State {
   notes: Record<string, string>;
   /** "<lesson>:<stepId>" → review card */
   review: Record<string, Card>;
-  settings: { script: ScriptSetting; countVisits: boolean; welcomeSeen: boolean };
+  settings: { script: ScriptSetting; countVisits: boolean; welcomeSeen: boolean; showPanchang: boolean };
 }
 
 export interface KV {
@@ -25,7 +25,7 @@ export interface KV {
 }
 
 export function defaultState(): State {
-  return { version: 1, completed: {}, notes: {}, review: {}, settings: { script: "both", countVisits: true, welcomeSeen: false } };
+  return { version: 1, completed: {}, notes: {}, review: {}, settings: { script: "both", countVisits: true, welcomeSeen: false, showPanchang: true } };
 }
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -70,10 +70,13 @@ export function parseState(raw: unknown): State | null {
   if (isRecord(raw.settings) && typeof raw.settings.welcomeSeen === "boolean") {
     out.settings.welcomeSeen = raw.settings.welcomeSeen;
   }
+  if (isRecord(raw.settings) && typeof raw.settings.showPanchang === "boolean") {
+    out.settings.showPanchang = raw.settings.showPanchang;
+  }
   return out;
 }
 
-function defaultKV(): KV | null {
+export function defaultKV(): KV | null {
   try {
     return typeof localStorage === "undefined" ? null : localStorage;
   } catch {

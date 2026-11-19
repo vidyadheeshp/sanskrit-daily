@@ -69,6 +69,22 @@
 </fieldset>
 
 <div class="card stack">
+  <h2>Sanskrit calendar</h2>
+  <label class="radio">
+    <input
+      type="checkbox"
+      checked={app.state.settings.showPanchang}
+      onchange={(e) => app.setShowPanchang(e.currentTarget.checked)}
+    />
+    Show today's panchang card on the Today page
+  </label>
+  <p class="muted" style="margin: 0">
+    A small card of Sanskrit time-words for today. It is calculated in your browser; your location, if you share it, is
+    never sent anywhere.
+  </p>
+</div>
+
+<div class="card stack">
   <h2>Visit counter</h2>
   {#if COUNTER_CODE}
     <label class="radio">

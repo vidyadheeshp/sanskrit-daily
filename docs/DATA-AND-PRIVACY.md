@@ -16,9 +16,19 @@ Everything is stored in your own browser's `localStorage` under the key `sanskri
 | `completed` | lesson numbers + the local date you finished them | show "days practised", mark the archive |
 | `notes` | the recap rule from lessons you finished | "My notes" page |
 | `review` | spaced-review box and due date per item | optional quick review |
-| `settings` | script preference; whether to count your visits; whether you have seen the welcome page | display, privacy, and showing the welcome page only once |
+| `settings` | script preference; whether to count your visits; whether you have seen the welcome page; whether to show the panchang card | display, privacy, and showing the welcome page only once |
 
 It never leaves your device unless **you** press *Export* and save the file yourself.
+
+## Your location (optional, for the panchang card)
+
+The Today page can show a small panchang card. Sunrise, and so the tithi, depend on where you are:
+- Until you choose, it shows **New Delhi**. Nothing is requested from your browser.
+- If you tap **Use my location**, your browser asks permission. Coordinates are **rounded to about 1 km** and stored on
+  your device under a **separate key** (`sanskrit-daily:place`), so they are **not** in the progress file you can export.
+- **Nothing is sent anywhere**: the calculation happens in your browser, and no maps or geocoding service is used.
+- **Forget my location** (on the card) and **Delete everything** (Settings) both remove it. Or pick a city instead.
+- The card can be switched off entirely in Settings → Sanskrit calendar.
 
 ## The visit counter
 

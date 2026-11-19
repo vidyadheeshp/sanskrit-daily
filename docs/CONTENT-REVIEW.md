@@ -28,6 +28,14 @@ A lesson may be published at level 1–2 **with the badge**. Level 3 sign-off fl
 - No claim about history, religion or origin is made without a source.
 - Wrong-answer explanations don't teach a new error.
 
+## The panchang card
+
+The Sanskrit names in `src/lib/panchang/terms.ts` (weekdays, tithis, the 27 nakṣatras, the 27 yogas, the karaṇas) and
+the short note on the card are **not yet scholar-reviewed**. The *calculations* are validated separately against
+independent astronomical data and a published almanac (docs/PANCHANG.md). A reviewer should check: spellings in both
+scripts, the ordinal glosses, the weekday glosses, the note's wording, and whether the drik/Lahiri convention suits the
+intended audience.
+
 ## Source policy
 
 Prefer, in order: classical grammars and standard commentaries; a recognised modern

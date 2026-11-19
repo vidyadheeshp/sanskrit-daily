@@ -5,6 +5,7 @@
   import { dueItems } from "../lib/srs";
   import { app } from "../lib/store.svelte";
   import { getLesson, lessonCount, lessons } from "../lessons";
+  import PanchangCard from "../components/PanchangCard.svelte";
 
   const today = localISO(); // the learner's own day: used for their review schedule
   const scheduleDay = scheduleToday(); // IST: used for which lesson is open
@@ -87,6 +88,10 @@
       <a class="btn" href="#/review">Review</a>
     </div>
   </div>
+{/if}
+
+{#if app.state.settings.showPanchang}
+  <PanchangCard />
 {/if}
 
 <p class="muted">

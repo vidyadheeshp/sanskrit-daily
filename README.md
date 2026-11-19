@@ -23,6 +23,7 @@ backend and no tracking of what you do (just an optional, anonymous visit counte
   lesson on the same day, so people can talk about it. Missed a day? The archive is always open.
 - **Non-addictive by design.** Lessons take 3–6 minutes and end with a clear "done for today".
   No streak guilt, no notifications, no infinite play. See [docs/DESIGN-PRINCIPLES.md](docs/DESIGN-PRINCIPLES.md).
+- **A little Sanskrit calendar.** The Today page has an optional card of today's panchang (weekday, tithi, nakṣatra, yoga, karaṇa) in Sanskrit, calculated in your browser. It is for vocabulary, not predictions.
 - **No server.** Progress is stored in your own browser. Each lesson unlocks at 6:00 AM IST on its day, for everyone; locked lessons aren't even in the site's code. You can export it to a file and move it
   to another device.
 - **Works offline** once installed as a PWA.
@@ -77,6 +78,7 @@ Full reasoning: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 | [docs/LESSON-AUTHORING-GUIDE.md](docs/LESSON-AUTHORING-GUIDE.md) | write a new lesson |
 | [docs/CURRICULUM.md](docs/CURRICULUM.md) | see the weekly rhythm and the first 28 days |
 | [docs/CONTENT-REVIEW.md](docs/CONTENT-REVIEW.md) | know how lessons are checked for correctness |
+| [docs/PANCHANG.md](docs/PANCHANG.md) | see how the panchang card is calculated and validated |
 | [docs/RELEASING.md](docs/RELEASING.md) | schedule lessons and run the daily release |
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | set up GitHub Pages, the counter and link previews |
 | [docs/LAUNCH-POSTS.md](docs/LAUNCH-POSTS.md) | copy the LinkedIn / WhatsApp launch posts |

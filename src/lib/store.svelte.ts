@@ -1,5 +1,6 @@
 import { loadState, saveState, clearState, defaultState, type State } from "./storage";
 import { localISO } from "./date";
+import { clearPlace } from "./place";
 import { newCard, grade } from "./srs";
 import type { ScriptSetting } from "./markup";
 
@@ -41,6 +42,11 @@ class AppStore {
     this.commit();
   }
 
+  setShowPanchang(on: boolean) {
+    this.state.settings.showPanchang = on;
+    this.commit();
+  }
+
   setCountVisits(on: boolean) {
     this.state.settings.countVisits = on;
     this.commit();
@@ -71,6 +77,7 @@ class AppStore {
 
   reset() {
     clearState();
+    clearPlace(); // the saved panchang location is deleted with everything else
     this.state = defaultState();
     this.persisted = true;
   }
