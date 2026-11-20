@@ -168,11 +168,13 @@ describe("author credit", () => {
     flushSync();
   };
 
-  it("is hidden until a name is set, then shows the credit, link and copyright", async () => {
+  it("is hidden without a name, shows the credit, link and copyright with one", async () => {
     const { AUTHOR } = await import("../config");
-    expect(document.querySelector(".credit")).toBeNull();
     const original = { ...AUTHOR };
     try {
+      AUTHOR.name = "";
+      remount();
+      expect(document.querySelector(".credit")).toBeNull();
       AUTHOR.name = "Test Author";
       AUTHOR.url = "https://example.com/";
       remount();
