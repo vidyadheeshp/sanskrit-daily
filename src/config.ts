@@ -39,7 +39,7 @@ export const SITE_TAGLINE_EN = "Sanskrit, every day";
  * Who made this. Shown in the footer ("Made with love by ...", copyright line) only once `name` is filled in;
  * `url` (personal website) is optional. A plain object so tests can change it.
  */
-export const AUTHOR = { name: "", url: "" };
+export const AUTHOR = { name: "Vidyadheesh Pandurangi", url: "https://vidyadheeshp.github.io/" };
 /** First year of publication, for the copyright line. */
 export const COPYRIGHT_YEAR = 2026;
 

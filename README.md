@@ -99,7 +99,7 @@ docs/              all project documentation
 
 ## License
 
-Copyright © 2026 the project owner (name shown in the site footer, set in `src/config.ts` as `AUTHOR`).
+Copyright © 2026 Vidyadheesh Pandurangi ([vidyadheeshp.github.io](https://vidyadheeshp.github.io/)). Shown in the site footer; set in `src/config.ts` as `AUTHOR`.
 
 - **Code:** [AGPL-3.0](LICENSE).
 - **Lesson content** (the text in `src/lessons/`): a licence has not been chosen yet, so all rights are
