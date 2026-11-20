@@ -46,3 +46,28 @@ export const todayUTC = () => new Date().toISOString().slice(0, 10);
 export function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
+
+interface PostLesson {
+  number: number;
+  title: string;
+  teaser: string;
+  minutes: number;
+}
+
+/** Ready-to-paste LinkedIn text for a lesson. */
+export const linkedinPost = (l: PostLesson, url: string): string =>
+  [
+    `🪔 Dine Dine · Sanskrit Daily · Lesson ${l.number}`,
+    ``,
+    l.teaser,
+    ``,
+    `Today's lesson takes about ${l.minutes} minutes. Free, no login, no ads — it works in your browser.`,
+    ``,
+    `👉 ${url}`,
+    ``,
+    `New lesson every day. #Sanskrit #LearnSanskrit #LanguageLearning #IndianLanguages`,
+  ].join("\n");
+
+/** Ready-to-paste WhatsApp text for a lesson. */
+export const whatsappPost = (l: PostLesson, url: string): string =>
+  [`🪔 *Dine Dine · Sanskrit Daily #${l.number}*`, l.teaser, `${l.minutes} min, free, no login 👉 ${url}`].join("\n");

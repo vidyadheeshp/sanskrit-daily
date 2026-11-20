@@ -19,12 +19,14 @@ WhatsApp has no safe, official way to post automatically from a script, so this 
 
 One-time set-up (in the WhatsApp phone app): *Updates* tab -> *+* -> *New channel* -> name it "Dine Dine · Sanskrit Daily", add the logo, then copy the channel link and put it wherever you share the site.
 
-Every morning after 6:00 AM IST (the deploy has finished by then):
+Every morning the deploy sends the text to you, so there is nothing to run:
 
-```
-npm run post -- today
-```
+1. At 6:00 AM IST the daily deploy publishes the lesson. When the site is live, a final step (`notify` in `.github/workflows/deploy.yml`, text from `scripts/post-issue.ts`) opens a GitHub issue titled "Post today's lesson: #N ...", assigned to the repository owner, and closes it again straight away to keep the list tidy.
+2. GitHub **emails** you the issue, with the WhatsApp text (and an optional LinkedIn text) in code blocks. The GitHub mobile app also gives a push notification if you install it and leave notifications on.
+3. Open it on your phone, tap the copy button on the WhatsApp block, and paste it into the channel. About 30 seconds.
 
-Copy the block under `--- WhatsApp ---` into the channel. The link inside is the lesson's share page, which shows a proper preview card in WhatsApp. Other options: `npm run post -- 5` (a specific lesson) or `npm run post -- all`.
+It uses GitHub's own token, so there are no extra accounts, passwords or secrets. It runs only on the daily schedule and on "Run workflow" (a handy way to test it), never on ordinary pushes. Nothing is posted anywhere for you.
 
-Tip: schedule the post in your phone's reminders for 6:15 AM so it becomes a habit.
+If the email does not arrive: check the issue exists under the repository's *Issues* tab (Issues must be enabled), that your GitHub notification settings send email, and the spam folder. Mail comes from GitHub's notifications address.
+
+Manual fallback: `npm run post -- today` prints the same text; `npm run post -- 5` or `-- all` for other lessons.

@@ -55,3 +55,36 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Each morning, once the new lesson is live, open an issue holding the ready-to-paste WhatsApp text.
+  # GitHub emails it to the repository owner (and to the GitHub mobile app); the issue is then closed
+  # again so the list stays tidy. Only on the daily schedule or a manual run, never on ordinary pushes.
+  notify:
+    needs: deploy
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Write today's post
+        run: npx tsx scripts/post-issue.ts
+        env:
+          SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}/', github.repository_owner, github.event.repository.name) }}
+      - name: Email it to the owner via a GitHub issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -f post.md ]; then
+            url=$(gh issue create --repo "$GITHUB_REPOSITORY" --assignee "$GITHUB_REPOSITORY_OWNER" \
+              --title "$(cat post-title.txt)" --body-file post.md)
+            gh issue close "$url" --repo "$GITHUB_REPOSITORY" --reason completed
+          else
+            echo "No lesson to post today."
+          fi

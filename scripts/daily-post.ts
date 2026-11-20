@@ -8,7 +8,7 @@
  * The link comes from SITE_URL (or schedule.json "siteUrl"). Edit the templates below to taste.
  */
 import { dayNumber, scheduleISO } from "../src/lib/date";
-import { loadLessons, readSchedule, siteUrl } from "./lib";
+import { linkedinPost, loadLessons, readSchedule, siteUrl, whatsappPost } from "./lib";
 
 const arg = process.argv[2] ?? "";
 const schedule = readSchedule();
@@ -29,19 +29,7 @@ for (const l of selected) {
   const url = `${site}d/${l.number}/`;
   console.log(`\n${"=".repeat(60)}\nLESSON ${l.number} — ${l.title}\n${"=".repeat(60)}`);
   console.log(`\n--- LinkedIn ---\n`);
-  console.log(
-    [
-      `🪔 Dine Dine · Sanskrit Daily · Lesson ${l.number}`,
-      ``,
-      l.teaser,
-      ``,
-      `Today's lesson takes about ${l.minutes} minutes. Free, no login, no ads — it works in your browser.`,
-      ``,
-      `👉 ${url}`,
-      ``,
-      `New lesson every day. #Sanskrit #LearnSanskrit #LanguageLearning #IndianLanguages`,
-    ].join("\n"),
-  );
+  console.log(linkedinPost(l, url));
   console.log(`\n--- WhatsApp ---\n`);
-  console.log([`🪔 *Dine Dine · Sanskrit Daily #${l.number}*`, l.teaser, `${l.minutes} min, free, no login 👉 ${url}`].join("\n"));
+  console.log(whatsappPost(l, url));
 }
