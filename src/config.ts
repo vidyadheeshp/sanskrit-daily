@@ -35,6 +35,14 @@ export const SITE_SUBTITLE = "Sanskrit Daily";
 export const SITE_TAGLINE = "प्रतिदिनं संस्कृतम्";
 export const SITE_TAGLINE_EN = "Sanskrit, every day";
 
+/**
+ * Who made this. Shown in the footer ("Made with love by ...", copyright line) only once `name` is filled in;
+ * `url` (personal website) is optional. A plain object so tests can change it.
+ */
+export const AUTHOR = { name: "", url: "" };
+/** First year of publication, for the copyright line. */
+export const COPYRIGHT_YEAR = 2026;
+
 /** Public repository (used for the "report a mistake" link). */
 export const REPO_URL = "https://github.com/vidyadheeshp/sanskrit-daily";
 

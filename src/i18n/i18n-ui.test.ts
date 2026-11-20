@@ -160,3 +160,33 @@ describe("daily reminder", () => {
     expect(page()).toContain(kn["reminder.ics"]);
   });
 });
+
+describe("author credit", () => {
+  const remount = () => {
+    document.body.innerHTML = '<div id="root"></div>';
+    mount(App, { target: document.getElementById("root")! });
+    flushSync();
+  };
+
+  it("is hidden until a name is set, then shows the credit, link and copyright", async () => {
+    const { AUTHOR } = await import("../config");
+    expect(document.querySelector(".credit")).toBeNull();
+    const original = { ...AUTHOR };
+    try {
+      AUTHOR.name = "Test Author";
+      AUTHOR.url = "https://example.com/";
+      remount();
+      const credit = document.querySelector(".credit");
+      expect(credit?.textContent).toContain("Made with");
+      expect(credit?.textContent).toContain("© 2026 Test Author");
+      expect(credit?.querySelector<HTMLAnchorElement>('a[href="https://example.com/"]')?.textContent).toBe("Test Author");
+
+      AUTHOR.url = "";
+      remount();
+      expect(document.querySelector(".credit")?.textContent).toContain("Test Author");
+      expect(document.querySelector('.credit a[href="https://example.com/"]')).toBeNull();
+    } finally {
+      Object.assign(AUTHOR, original);
+    }
+  });
+});

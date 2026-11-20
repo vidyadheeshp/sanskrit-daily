@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { COUNTER_CODE, REPO_URL, SITE_TAGLINE } from "../config";
+  import { AUTHOR, COPYRIGHT_YEAR, COUNTER_CODE, REPO_URL, SITE_TAGLINE } from "../config";
   import { app } from "../lib/store.svelte";
   import { countingAllowed, fetchTotal } from "../lib/counter";
   import { t } from "../i18n";
@@ -7,6 +7,7 @@
   import Msg from "./Msg.svelte";
 
   let total = $state<string | null>(null);
+  const licenseUrl = `${REPO_URL}/blob/main/LICENSE`;
 
   const enabled = $derived(
     countingAllowed({
@@ -41,6 +42,12 @@
       {:else}
         {t("footer.counterOff")}
       {/if}
+    </div>
+  {/if}
+  {#if AUTHOR.name}
+    <div class="credit">
+      <Msg k="footer.made" p={{ name: AUTHOR.name, url: AUTHOR.url }} />
+      · <Msg k="footer.copyright" p={{ year: COPYRIGHT_YEAR, name: AUTHOR.name, license: licenseUrl }} />
     </div>
   {/if}
   {#if !languageInfo(app.language).reviewed}

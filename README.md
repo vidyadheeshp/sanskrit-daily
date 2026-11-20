@@ -99,6 +99,8 @@ docs/              all project documentation
 
 ## License
 
+Copyright © 2026 the project owner (name shown in the site footer, set in `src/config.ts` as `AUTHOR`).
+
 - **Code:** [AGPL-3.0](LICENSE).
 - **Lesson content** (the text in `src/lessons/`): a licence has not been chosen yet, so all rights are
   reserved for now. Please ask before reusing lesson text. See [docs/CONTENT-REVIEW.md](docs/CONTENT-REVIEW.md).
