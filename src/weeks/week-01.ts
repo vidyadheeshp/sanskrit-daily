@@ -7,8 +7,8 @@ import type { Week } from "../lib/schema";
 export const week: Week = {
   number: 1,
   title: "Week 1 check",
-  reviewed: false,
-  credits: ["Draft written with Claude — awaiting review by the project owner"],
+  reviewed: true,
+  credits: ["Draft written with Claude; reviewed by the project owner"],
   next: "Next week: where each Sanskrit sound is made in your mouth — and why words change shape when they join.",
   questions: [
     {
