@@ -205,6 +205,11 @@ export const en = {
   "settings.cal.toggle": "Show today's panchang card on the Today page",
   "settings.cal.note":
     "A small card of Sanskrit time-words for today. It is calculated in your browser; your location, if you share it, is never sent anywhere.",
+  "reminder.title": "Daily reminder",
+  "reminder.body": "Add a repeating entry to your own calendar and it will remind you each morning when the new lesson opens.",
+  "reminder.ics": "Add to my calendar",
+  "reminder.google": "Add to Google Calendar",
+  "reminder.note": "Repeats every day at {time} (shown in your own time zone). It lives in your calendar app; nothing is sent to us. Delete the entry any time to stop.",
   "settings.counter.title": "Visit counter",
   "settings.counter.toggle": "Count my visits anonymously",
   "settings.counter.note":

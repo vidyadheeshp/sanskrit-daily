@@ -146,3 +146,17 @@ describe("storage", () => {
     expect(parseState(old)?.settings.language).toBe("en");
   });
 });
+
+describe("daily reminder", () => {
+  it("Settings offers the calendar file and the Google link, in both languages", async () => {
+    await goto("#/settings");
+    const ics = document.querySelector<HTMLAnchorElement>('a[href$="dine-dine-daily.ics"]');
+    expect(ics?.hasAttribute("download")).toBe(true);
+    const g = document.querySelector<HTMLAnchorElement>('a[href^="https://calendar.google.com/"]');
+    expect(g?.getAttribute("rel")).toContain("noopener");
+    expect(new URL(g!.href).searchParams.get("recur")).toBe("RRULE:FREQ=DAILY");
+    expect(page()).toContain(en["reminder.ics"]);
+    await click(langButton("kn"));
+    expect(page()).toContain(kn["reminder.ics"]);
+  });
+});

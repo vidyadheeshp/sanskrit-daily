@@ -6,7 +6,7 @@
   "description": "A new small Sanskrit lesson every day. Frontend only, no login, no tracking.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsx scripts/build-share-pages.ts",
+    "build": "vite build && tsx scripts/build-share-pages.ts && tsx scripts/build-calendar.ts",
     "preview": "vite preview",
     "test": "vitest run",
     "check": "svelte-check --tsconfig ./tsconfig.json",

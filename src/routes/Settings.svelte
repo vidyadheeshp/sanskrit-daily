@@ -6,6 +6,7 @@
   import { t, type Key } from "../i18n";
   import { LANGUAGES } from "../i18n/langs";
   import type { ScriptSetting } from "../lib/markup";
+  import ReminderLinks from "../components/ReminderLinks.svelte";
 
   const scripts: { value: ScriptSetting; label: Key }[] = [
     { value: "both", label: "settings.script.both" },
@@ -96,6 +97,12 @@
     {t("settings.cal.toggle")}
   </label>
   <p class="muted" style="margin: 0">{t("settings.cal.note")}</p>
+</div>
+
+<div class="card stack">
+  <h2>{t("reminder.title")}</h2>
+  <p class="muted" style="margin: 0">{t("reminder.body")}</p>
+  <ReminderLinks />
 </div>
 
 <div class="card stack">

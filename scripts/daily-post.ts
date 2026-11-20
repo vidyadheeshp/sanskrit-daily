@@ -1,11 +1,13 @@
 /**
  * Prints ready-to-paste LinkedIn and WhatsApp posts for a lesson.
  *
+ *   npm run post -- today    today's lesson (the one that opened at 6:00 AM IST)
  *   npm run post -- 3        one lesson
  *   npm run post -- all      every lesson written so far
  *
  * The link comes from SITE_URL (or schedule.json "siteUrl"). Edit the templates below to taste.
  */
+import { dayNumber, scheduleISO } from "../src/lib/date";
 import { loadLessons, readSchedule, siteUrl } from "./lib";
 
 const arg = process.argv[2] ?? "";
@@ -13,9 +15,13 @@ const schedule = readSchedule();
 const site = siteUrl(schedule) || "https://YOUR-SITE-URL/";
 const lessons = await loadLessons();
 
-const selected = arg === "all" ? lessons : lessons.filter((l) => String(l.number) === arg);
+const wanted =
+  arg === "today" && schedule.launchDate
+    ? String(dayNumber(scheduleISO(new Date(), schedule.unlockHourIST), schedule.launchDate))
+    : arg;
+const selected = arg === "all" ? lessons : lessons.filter((l) => String(l.number) === wanted);
 if (selected.length === 0) {
-  console.error('Usage: npm run post -- <lesson number | all>');
+  console.error('Usage: npm run post -- <lesson number | today | all>');
   process.exit(1);
 }
 

@@ -78,3 +78,7 @@ addresses) under its own privacy policy. The app itself adds nothing to that, ap
 ## Weekly check
 
 `weeks` records, per week, the date the weekly check was first finished. It is stored in the browser with the other progress, included in the progress export, and never sent anywhere. The score is shown on screen only and is not stored. The badge image is made in the browser and contains nothing about the person.
+
+## Daily calendar reminder
+
+The "Add to my calendar" button downloads a static file (`dine-dine-daily.ics`) and the Google button opens a Google Calendar page; neither sends anything to us. The reminder then lives in the learner's own calendar. See [DAILY-ROUTINE.md](DAILY-ROUTINE.md).

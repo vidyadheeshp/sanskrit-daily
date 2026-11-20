@@ -110,3 +110,5 @@ English by default; Kannada (draft, interface only) is opt-in from the header or
 ## Weekly check
 
 After each week of seven lessons, a short check and a plain thank-you badge. See [docs/WEEKLY-CHECK.md](docs/WEEKLY-CHECK.md).
+
+Daily calendar reminder and the WhatsApp routine: [docs/DAILY-ROUTINE.md](docs/DAILY-ROUTINE.md).

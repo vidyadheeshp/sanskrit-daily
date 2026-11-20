@@ -6,6 +6,7 @@
   import Msg from "./Msg.svelte";
   import Rich from "./Rich.svelte";
   import ShareButton from "./ShareButton.svelte";
+  import ReminderLinks from "./ReminderLinks.svelte";
   import { weekEndingWith } from "../weeks";
   import ExplainStepView from "./ExplainStep.svelte";
   import DemoStepView from "./DemoStep.svelte";
@@ -80,6 +81,9 @@
         <a class="btn btn-primary" href="#/week/{endOfWeek.number}">{t("week.cta", { n: endOfWeek.number })}</a>
       </div>
     {/if}
+    <h2 style="margin-top: 0.5rem">{t("reminder.title")}</h2>
+    <p class="muted" style="margin: 0">{t("reminder.body")}</p>
+    <ReminderLinks />
     <h2 style="margin-top: 0.5rem">{t("done.share")}</h2>
     <ShareButton {lesson} />
   </section>
