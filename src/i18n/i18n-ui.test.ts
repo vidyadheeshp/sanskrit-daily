@@ -178,7 +178,7 @@ describe("author credit", () => {
       AUTHOR.name = "Test Author";
       AUTHOR.url = "https://example.com/";
       remount();
-      const credit = document.querySelector(".credit");
+      const credit = document.querySelector(".credit")!.parentElement;
       expect(credit?.textContent).toContain("Made with");
       expect(credit?.textContent).toContain("© 2026 Test Author");
       expect(credit?.querySelector<HTMLAnchorElement>('a[href="https://example.com/"]')?.textContent).toBe("Test Author");

@@ -45,10 +45,8 @@
     </div>
   {/if}
   {#if AUTHOR.name}
-    <div class="credit">
-      <Msg k="footer.made" p={{ name: AUTHOR.name, url: AUTHOR.url }} />
-      · <Msg k="footer.copyright" p={{ year: COPYRIGHT_YEAR, name: AUTHOR.name, license: licenseUrl }} />
-    </div>
+    <div class="credit"><Msg k="footer.made" p={{ name: AUTHOR.name, url: AUTHOR.url }} /></div>
+    <div class="credit"><Msg k="footer.copyright" p={{ year: COPYRIGHT_YEAR, name: AUTHOR.name, license: licenseUrl }} /></div>
   {/if}
   {#if !languageInfo(app.language).reviewed}
     <div class="draft-notice" lang={app.language}><Msg k="lang.draft" p={{ repo: REPO_URL }} /></div>

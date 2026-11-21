@@ -41,7 +41,7 @@ export const en = {
 
   // ---------- footer ----------
   "footer.made": "Made with ❤️ by [{name}]({url})",
-  "footer.copyright": "© {year} {name}. Code under [AGPL-3.0]({license}); lesson text: all rights reserved.",
+  "footer.copyright": "© {year} {name} · Code: [AGPL-3.0]({license}) · Lessons: please ask before reusing",
   "footer.privacy": "No accounts, no ads. Your progress and answers stay in this browser.",
   "footer.counterOn":
     "Visits are counted anonymously (no cookies, nothing about what you answer) — [switch off](#/settings).",

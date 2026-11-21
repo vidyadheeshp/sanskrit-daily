@@ -103,7 +103,7 @@ Copyright © 2026 Vidyadheesh Pandurangi ([vidyadheeshp.github.io](https://vidya
 
 - **Code:** [AGPL-3.0](LICENSE).
 - **Lesson content** (the text in `src/lessons/`): a licence has not been chosen yet, so all rights are
-  reserved for now. Please ask before reusing lesson text. See [docs/CONTENT-REVIEW.md](docs/CONTENT-REVIEW.md).
+  reserved for now. Please ask before reusing lesson text (lessons are © Vidyadheesh Pandurangi; they were drafted with Claude and reviewed and edited by the owner). See [docs/CONTENT-REVIEW.md](docs/CONTENT-REVIEW.md).
 
 ## Languages
 
