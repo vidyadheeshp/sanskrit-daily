@@ -61,7 +61,7 @@ Days 1–7 are all conversation; after that the two tracks alternate.
 | 27 | culture | A subhāṣita that shows sandhi | |
 | 28 | challenge | Un-join the sandhi (viccheda) | |
 
-> Week 2 (lessons 8–14) is written as drafts (`reviewed: false`), to be reviewed one by one before each opens. The old sandhi draft is now lesson 11; `src/lessons/drafts/` is empty. The Week 2 weekly check is not written yet.
+> Week 2 (lessons 8–14) is written as drafts (`reviewed: false`), to be reviewed one by one before each opens. The old sandhi draft is now lesson 11; `src/lessons/drafts/` is empty. The Week 2 weekly check (`src/weeks/week-02.ts`) is written as a draft too.
 
 ## Roadmap
 
