@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { flushSync, mount, tick, unmount } from "svelte";
 import App from "./App.svelte";
 import LessonPlayer from "./components/LessonPlayer.svelte";
-import { drafts } from "./lessons/drafts";
+import { getLesson } from "./lessons";
 import { lessons, lessonCount } from "./lessons";
 import { STORAGE_KEY, SCHEDULE } from "./config";
 import { addDays, formatISO } from "./lib/date";
@@ -94,7 +94,7 @@ async function autoplay(lesson: Lesson) {
     if (step.kind === "explain") {
       await click("Continue");
     } else if (step.kind === "demo") {
-      if (step.widget === "reveal-cards") {
+      if (step.widget === "reveal-cards" || step.widget === "place-chart" || step.widget === "sandhi-demo") {
         const cards = Array.from(document.querySelectorAll<HTMLButtonElement>(".place-btn"));
         for (const c of cards.slice(0, step.requiredInteractions)) await clickEl(c);
       } else if (step.widget === "word-by-word") {
@@ -780,26 +780,33 @@ describe("visit counter setting", () => {
   });
 });
 
-describe("Draft sandhi lesson (exercises the place-chart and sandhi widgets)", () => {
-  it("plays through the real lesson player", async () => {
-    const lesson = drafts.find((d) => d.concept === "consonant-sandhi")!;
+describe("Lesson 8 (exercises the place-chart widget)", () => {
+  it("gates the demo until every place is explored", async () => {
+    const lesson = getLesson(8)!;
     const app = mount(LessonPlayer, { target: document.getElementById("root")!, props: { lesson } });
     await tick();
-
-    // hook, places
-    await click("Continue");
-    await click("Continue");
-
-    // place chart: gated until 3 places
+    await click("Continue"); // hook
     expect(cont().disabled).toBe(true);
     await click("Lips");
     await click("Teeth");
-    expect(cont().disabled).toBe(true);
+    await click("Roof of the mouth");
     await click("Palate");
+    expect(cont().disabled).toBe(true);
+    await click("Back of the mouth");
     expect(cont().disabled).toBe(false);
-    await click("Continue");
+    unmount(app);
+  });
+});
 
-    // idea, sandhi demo
+describe("Lesson 11, consonant sandhi (exercises the sandhi widget)", () => {
+  it("plays through the real lesson player", async () => {
+    const lesson = getLesson(11)!;
+    const app = mount(LessonPlayer, { target: document.getElementById("root")!, props: { lesson } });
+    await tick();
+
+    // hook, what you already know, the shortcut
+    await click("Continue");
+    await click("Continue");
     await click("Continue");
     expect(cont().disabled).toBe(true);
     for (const w of ["च ca", "जयति jayati", "टीका ṭīkā", "करोति karoti"]) await click(w, { exact: true });

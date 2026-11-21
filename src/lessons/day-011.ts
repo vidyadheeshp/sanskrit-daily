@@ -1,15 +1,15 @@
-import type { Lesson } from "../../lib/schema";
+import type { Lesson } from "../lib/schema";
 
 export const lesson: Lesson = {
-  number: 3,
+  number: 11,
   title: "Why does tat + ca become tac ca?",
   concept: "consonant-sandhi",
   teaser:
     "Why does तत् + च become तच्च? Your mouth is taking a shortcut — can you spot it?",
   rhythm: "new",
   minutes: 6,
-  prerequisites: [],
-  credits: ["Draft written with Claude — awaiting contributor and scholar review"],
+  prerequisites: [8, 9, 10],
+  credits: ["Draft written with Claude; awaiting review"],
   reviewed: false,
   sources: [
     "Pāṇini, Aṣṭādhyāyī 8.4.40 (stoḥ ścunā ścuḥ), 8.4.41 (ṣṭunā ṣṭuḥ), 8.4.60 (tor li) — numbering to be verified by a reviewer",
@@ -28,19 +28,11 @@ export const lesson: Lesson = {
     {
       kind: "explain",
       id: "places",
-      title: "Where sounds live",
+      title: "What you already know",
       body: [
-        "Every consonant is made by touching somewhere in the mouth.",
-        "The Sanskrit alphabet is sorted by that place into five groups called **vargas**. Explore them below.",
+        "In the last three lessons you learned that every consonant is made at one of five places: **back** ({क|ka}), **palate** ({च|ca}), **roof** ({ट|ṭa}), **teeth** ({त|ta}) and **lips** ({प|pa}).",
+        "Now we put that to work. It explains why Sanskrit words change shape when they meet.",
       ].join("\n"),
-    },
-    {
-      kind: "demo",
-      id: "place-chart",
-      title: "The five places",
-      widget: "place-chart",
-      prompt: "Tap three different places. Say the first letter slowly and feel where your tongue or lips touch.",
-      requiredInteractions: 3,
     },
     {
       kind: "explain",

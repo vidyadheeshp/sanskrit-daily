@@ -39,13 +39,13 @@ Days 1–7 are all conversation; after that the two tracks alternate.
 | 5 | build | **Answer by tweaking the question** — *bhavān kiṃ pibati? → ahaṃ jalaṃ pibāmi* | built |
 | 6 | new | **The little dot** — the -ṃ ending: the thing the action lands on (*jalaṃ, pustakaṃ, devālayaṃ*) | built |
 | 7 | review | **Week 1** — a whole conversation, hello to "what are you reading?" | built |
-| 8 | new | The five places in the mouth | |
-| 9 | recognize | Sort letters by place | |
-| 10 | build | Build the varga chart: 5 groups × 5 letters | |
-| 11 | new | **Why *tat + ca* → *tac ca*?** — final dental meets a palatal | draft written |
-| 12 | recognize | Predict the joined form | |
-| 13 | build | Build the joined form | |
-| 14 | review | Fortnight review | |
+| 8 | new | The five places in the mouth | draft written |
+| 9 | recognize | Sort letters by place | draft written |
+| 10 | build | Build the varga chart: 5 groups × 5 letters | draft written |
+| 11 | new | **Why *tat + ca* → *tac ca*?** — final dental meets a palatal | draft written (was the unpublished sandhi draft) |
+| 12 | recognize | Predict the joined form | draft written |
+| 13 | build | Build the joined form | draft written |
+| 14 | review | Fortnight review (weeks 1 and 2 mixed) | draft written |
 | 15 | new | **"Where?"** — *kutra*, *ahaṃ devālayaṃ gacchāmi* | |
 | 16 | recognize | Which question word? (*kim / kutra / kaḥ*) | |
 | 17 | build | Build a question and its answer | |
@@ -61,8 +61,7 @@ Days 1–7 are all conversation; after that the two tracks alternate.
 | 27 | culture | A subhāṣita that shows sandhi | |
 | 28 | challenge | Un-join the sandhi (viccheda) | |
 
-> The sandhi lesson in `src/lessons/drafts/` is complete and tested but unpublished — it
-> becomes lesson 11 once lessons 2–10 exist. Lessons are published in order with no gaps.
+> Week 2 (lessons 8–14) is written as drafts (`reviewed: false`), to be reviewed one by one before each opens. The old sandhi draft is now lesson 11; `src/lessons/drafts/` is empty. The Week 2 weekly check is not written yet.
 
 ## Roadmap
 

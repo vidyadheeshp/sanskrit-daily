@@ -35,3 +35,7 @@ A week is replaced by an empty stub in production builds until its last lesson i
 
 - The check is self-marked in the browser. Nobody can verify a badge, which is exactly why it makes no claims.
 - Week 1 questions and the Week 2 teaser are drafts awaiting review.
+
+## Week-by-week overview
+
+The Archive opens with "Your progress, week by week": for each week that has an open lesson, how many of its lessons are done (with a bar), and a link to that week's check ("Check done ✓" once taken). Below it, lessons are grouped by week, newest week first; only the current week is expanded. Computed in the browser from the learner's own progress. Tests: `src/weeks/overview-ui.test.ts`.
