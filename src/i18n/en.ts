@@ -126,6 +126,16 @@ export const en = {
   "today.review.one": "{n} question from earlier lessons, whenever you feel like it.",
   "today.review.many": "{n} questions from earlier lessons, whenever you feel like it.",
   "today.review.btn": "Review",
+  "today.start.title": "New here? Start with Lesson 1",
+  "today.start.body": "Each lesson builds on the one before, so starting from the beginning works best. It takes a few minutes a day and you can go at your own pace. Missing days costs nothing.",
+  "today.start.btn": "Start Lesson 1",
+  "today.mine.title": "Your next lesson: {n}",
+  "today.mine.body": "Pick up where you left off. Every lesson before today's stays open.",
+  "today.mine.btn": "Continue with Lesson {n}",
+  "today.progress": "**{done}** of **{total}** lessons done so far.",
+  "lesson.builds": "This is lesson {n}. It builds on earlier lessons you haven't done yet, so starting from **Lesson {first}** works best.",
+  "lesson.builds.go": "Go to Lesson {first}",
+  "lesson.builds.stay": "Stay on this lesson",
   "today.practised": "Days practised: **{n}**. Missing a day costs nothing — there are no streaks here.",
 
   // ---------- Archive, lesson page, notes, review ----------

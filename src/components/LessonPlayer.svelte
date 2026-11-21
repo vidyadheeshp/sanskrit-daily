@@ -18,6 +18,11 @@
   let index = $state(0);
   let done = $state<Record<string, boolean>>({});
   let finished = $state(false);
+  let buildsDismissed = $state(false);
+  /** The first earlier lesson this learner hasn't done: lets us say "this builds on earlier lessons". */
+  const firstMissing = $derived(
+    Array.from({ length: lesson.number - 1 }, (_, i) => i + 1).find((k) => !app.isCompleted(k)) ?? null,
+  );
   let panel: HTMLElement | undefined = $state();
 
   /** Set when this is the last lesson of a week: offer that week's check. */
@@ -96,6 +101,15 @@
     <h1 lang={app.lessonLang}>{lesson.title}</h1>
     {#if app.lessonLang}
       <div class="callout" role="note"><Msg k="lang.lessonsEnglish" /></div>
+    {/if}
+    {#if index === 0 && firstMissing !== null && !buildsDismissed}
+      <div class="callout" role="note" data-builds>
+        <p style="margin: 0 0 0.5rem"><Msg k="lesson.builds" p={{ n: lesson.number, first: firstMissing }} /></p>
+        <div class="row">
+          <a class="btn btn-primary" href="#/day/{firstMissing}">{t("lesson.builds.go", { first: firstMissing })}</a>
+          <button type="button" class="btn" onclick={() => (buildsDismissed = true)}>{t("lesson.builds.stay")}</button>
+        </div>
+      </div>
     {/if}
     <div
       class="progress"

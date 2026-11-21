@@ -55,7 +55,7 @@ interface PostLesson {
 }
 
 /** Ready-to-paste LinkedIn text for a lesson. */
-export const linkedinPost = (l: PostLesson, url: string): string =>
+export const linkedinPost = (l: PostLesson, url: string, startUrl: string): string =>
   [
     `🪔 Dine Dine · Sanskrit Daily · Lesson ${l.number}`,
     ``,
@@ -65,9 +65,16 @@ export const linkedinPost = (l: PostLesson, url: string): string =>
     ``,
     `👉 ${url}`,
     ``,
+    `New here? Start from Lesson 1: ${startUrl}`,
+    ``,
     `New lesson every day. #Sanskrit #LearnSanskrit #LanguageLearning #IndianLanguages`,
   ].join("\n");
 
 /** Ready-to-paste WhatsApp text for a lesson. */
-export const whatsappPost = (l: PostLesson, url: string): string =>
-  [`🪔 *Dine Dine · Sanskrit Daily #${l.number}*`, l.teaser, `${l.minutes} min, free, no login 👉 ${url}`].join("\n");
+export const whatsappPost = (l: PostLesson, url: string, startUrl: string): string =>
+  [
+    `🪔 *Dine Dine · Sanskrit Daily #${l.number}*`,
+    l.teaser,
+    `${l.minutes} min, free, no login 👉 ${url}`,
+    `New here? Start from Lesson 1: ${startUrl}`,
+  ].join("\n");

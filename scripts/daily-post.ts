@@ -29,7 +29,7 @@ for (const l of selected) {
   const url = `${site}d/${l.number}/`;
   console.log(`\n${"=".repeat(60)}\nLESSON ${l.number} — ${l.title}\n${"=".repeat(60)}`);
   console.log(`\n--- LinkedIn ---\n`);
-  console.log(linkedinPost(l, url));
+  console.log(linkedinPost(l, url, `${site}d/1/`));
   console.log(`\n--- WhatsApp ---\n`);
-  console.log(whatsappPost(l, url));
+  console.log(whatsappPost(l, url, `${site}d/1/`));
 }

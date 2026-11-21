@@ -21,6 +21,10 @@
   const nextLocked = Number.isFinite(open) && open + 1 <= lessonCount ? open + 1 : null;
   const latest = lessons.filter((l) => l.number <= open).at(-1);
 
+  const available = Math.min(open, lessonCount); // lessons a learner may open right now
+  const nextForMe = $derived(
+    Array.from({ length: available }, (_, i) => i + 1).find((k) => !app.isCompleted(k)) ?? null,
+  );
   const dueCount = $derived(dueItems(app.state.review, today, MAX_REVIEW_PER_SESSION).length);
 </script>
 
@@ -33,6 +37,20 @@
     {:else}
       <Msg k="today.preview.soon" />
     {/if}
+  </div>
+{/if}
+
+{#if live && n > 1 && app.completedCount === 0}
+  <div class="card stack">
+    <h2>{t("today.start.title")}</h2>
+    <p>{t("today.start.body")}</p>
+    <div><a class="btn btn-primary" href="#/day/1">{t("today.start.btn")}</a></div>
+  </div>
+{:else if live && app.completedCount > 0 && nextForMe !== null && nextForMe !== current}
+  <div class="card stack">
+    <h2>{t("today.mine.title", { n: nextForMe })}</h2>
+    <p>{t("today.mine.body")}</p>
+    <div><a class="btn btn-primary" href="#/day/{nextForMe}">{t("today.mine.btn", { n: nextForMe })}</a></div>
   </div>
 {/if}
 
@@ -91,4 +109,7 @@
   <PanchangCard />
 {/if}
 
+{#if live && app.completedCount > 0 && available > 0}
+  <p class="muted" style="margin-bottom: 0.2rem"><Msg k="today.progress" p={{ done: app.completedCount, total: available }} /></p>
+{/if}
 <p class="muted"><Msg k="today.practised" p={{ n: app.daysPractised }} /></p>

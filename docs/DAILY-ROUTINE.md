@@ -30,3 +30,13 @@ It uses GitHub's own token, so there are no extra accounts, passwords or secrets
 If the email does not arrive: check the issue exists under the repository's *Issues* tab (Issues must be enabled), that your GitHub notification settings send email, and the spam folder. Mail comes from GitHub's notifications address.
 
 Manual fallback: `npm run post -- today` prints the same text; `npm run post -- 5` or `-- all` for other lessons.
+
+## People who arrive late
+
+Lessons build on each other, but a shared link lands on one day's lesson. So:
+
+- **Today page:** someone with no lessons done, arriving after day 1, sees "New here? Start with Lesson 1". Someone who has skipped ahead sees "Your next lesson: N" (their first unfinished lesson) above today's. Anyone with progress sees "X of Y lessons done so far". There are still no streaks.
+- **Lesson page:** if earlier lessons are not done, a note at the start says the lesson builds on them and offers the first one they have not done ("Stay on this lesson" dismisses it).
+- **Posts:** the WhatsApp and LinkedIn texts end with "New here? Start from Lesson 1: <link>". The link is the Lesson 1 share page, so it always has a preview.
+
+Everything here is computed in the browser from the learner's own progress; nothing is sent anywhere. Tests: `src/catchup-ui.test.ts`.
