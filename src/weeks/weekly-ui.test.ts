@@ -147,7 +147,8 @@ describe("weekly check", () => {
   it("appears in the Archive once the week's last lesson is open, marked done when finished", async () => {
     await goto("#/archive");
     expect(page()).toContain("Week 1 check and badge");
-    expect(page()).not.toContain("Week 2 check");
+    expect(page()).toContain("Week 2 check and badge");
+    expect(page()).not.toContain("Week 3 check"); // lessons 15–21 aren't written yet, so no check is offered
     store.completeWeek(1);
     await goto("#/archive");
     const entry = Array.from(document.querySelectorAll("a")).find((a) => a.textContent?.includes("Week 1 check"))!;
