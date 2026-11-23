@@ -128,7 +128,7 @@ export const lesson: Lesson = {
       pairs: [
         ["{भवान् किं पिबति|bhavān kiṃ pibati}", "{अहं जलं पिबामि|ahaṃ jalaṃ pibāmi}"],
         ["{भवान् किं पठति|bhavān kiṃ paṭhati}", "{अहं पुस्तकं पठामि|ahaṃ pustakaṃ paṭhāmi}"],
-        ["{भवतः नाम किम्|bhavataḥ nāma kim}", "{मम नाम सीता|mama nāma sītā}"],
+        ["{भवत्याः नाम किम्|bhavatyāḥ nāma kim}", "{मम नाम सीता|mama nāma sītā}"],
         ["{भवान् किं करोति|bhavān kiṃ karoti}", "{अहं भोजनं करोमि|ahaṃ bhojanaṃ karomi}"],
       ],
       why: "You can now hold a small conversation.",
